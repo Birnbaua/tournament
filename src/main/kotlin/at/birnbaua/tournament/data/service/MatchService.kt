@@ -20,7 +20,5 @@ class MatchService {
     fun deleteAllByTournament(tournament: String) : Mono<Long> { return repo.deleteAllByTournament(tournament) }
     fun deleteAllByTournamentAndNoIn(tournament: String, no: List<String> ) : Mono<Long> { return repo.deleteAllByTournamentAndNoIn(tournament, no) }
 
-    fun updateTeamName(old: String, new: String) : Mono<Long> {
-        
-    }
+    fun updateTeamName(tournament: String, old: String, new: String) : Mono<Long> { return repo.updateTeamName(tournament, old, new) }
 }
