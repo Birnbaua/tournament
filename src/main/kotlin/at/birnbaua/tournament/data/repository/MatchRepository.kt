@@ -18,6 +18,14 @@ interface MatchRepository : ReactiveMongoRepository<Match,ObjectId> {
     fun deleteAllByTournamentAndNoIn(tournament: String, no: List<String>) : Mono<Long>
 
     @Query(value = "{'tournament':  ?0}")
-    @Update(value = "{\$set: {'team_a': {\$cond: { if: {\$eq: ['team_a',?1] }, then: ?2, else: 'team_a' } } } }")
-    fun updateTeamName(tournament: String, old: String, name: String) : Mono<Long>
+    @Update(pipeline = [
+        "{\$set: {'team_a.name': {\$cond: { if: {\$eq: ['\$team_a.no',?1] }, then: ?2, else: '\$team_a.name' } } } }",
+        "{\$set: {'team_b.name': {\$cond: { if: {\$eq: ['\$team_b.no',?1] }, then: ?2, else: '\$team_b.name' } } } }",
+        "{\$set: {'referee.name': {\$cond: { if: {\$eq: ['\$referee.no',?1] }, then: ?2, else: '\$referee.name' } } } }"
+    ])
+    fun updateTeamNameByTournamentAndNo(tournament: String?, no: String?, name: String?) : Mono<Long>
+
+    @Query(value = "{'tournament': ?0}")
+    @Update(pipeline = ["{\$set: {'field.name': {\$cond: { if: {\$eq: ['\$field.no',?1] }, then: ?2, else: '\$field.name' } } } }"])
+    fun updateFieldNameByTournamentAndNo(tournament: String?, no: String?, name: String?) : Mono<Long>
 }

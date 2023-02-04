@@ -15,7 +15,7 @@ class Test {
     @Autowired
     private lateinit var ms: MatchService
 
-    @Scheduled(initialDelay = 500, fixedDelay = 1000*5)
+    @Scheduled(initialDelay = 500, fixedDelay = 1000*60)
     fun test() {
         val t = "TEST"
         ms.deleteAllByTournament(t).subscribe()
@@ -27,8 +27,9 @@ class Test {
         match.no = "1"
         match.teamA = teamA
         match.teamB = teamA
+        match.referee = teamA
         ms.insert(match).subscribe()
-        ms.updateTeamName(t, teamA.name!!,"EUREKA!").subscribe()
-        println(ms.findAllByTournament(t).map { it.teamA }.subscribe())
+        ms.updateTeamNameByTournamentAndNo(t, "1","EUREKA!").subscribe()
+        ms.findAllByTournament(t).map { it.teamA }.subscribe {println(it!!.name)}
     }
 }

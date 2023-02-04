@@ -7,10 +7,12 @@ import org.springframework.data.mongodb.core.index.CompoundIndexes
 import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.core.mapping.Field
 
-@Document(value = "team")
-@CompoundIndexes(value = [CompoundIndex(name = "team_index", def = "{'tournament': 1, 'no': 1}", unique = true)])
+@Document(collection = "field")
+@CompoundIndexes(value = [CompoundIndex(name = "field_index", def = "{'tournament': 1, 'no': 1}", unique = true)])
 @Suppress("unused")
-class Team {
+class Field {
+
+    enum class FieldType{ SAND,GRASS,HARD,UNKNOWN }
 
     @Id
     @Field(name = "_id")
@@ -28,11 +30,8 @@ class Team {
     @Field(name = "desc", write = Field.Write.NON_NULL)
     var desc: String? = null
 
-    @Field(name = "players")
-    var players: MutableList<String>? = null
-
-    @Field(name = "is_referee")
-    var isReferee: Boolean? = null
+    @Field(name = "field_type")
+    var type: FieldType? = null
 
     @Field(name = "audit")
     var audit: AuditEntry = AuditEntry()

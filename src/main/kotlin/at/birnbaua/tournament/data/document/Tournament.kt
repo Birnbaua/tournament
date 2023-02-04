@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Field
 import java.time.LocalDateTime
 
 @Document(value = "tournament")
-class Tournament : AbstractDocument() {
+class Tournament {
 
     @Id
     @Field(name = "_id")
@@ -20,4 +20,7 @@ class Tournament : AbstractDocument() {
 
     @Field(name = "start")
     var start: LocalDateTime? = null
+
+    @Field(name = "audit")
+    var audit: AuditEntry = AuditEntry()
 }

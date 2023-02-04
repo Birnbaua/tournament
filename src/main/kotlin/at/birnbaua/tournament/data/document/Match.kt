@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.index.CompoundIndex
 import org.springframework.data.mongodb.core.index.CompoundIndexes
 import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.core.mapping.Field
+import java.time.LocalDateTime
 
 @Document(value = "match")
 @CompoundIndexes(value = [CompoundIndex(name = "match_index", def = "{'tournament': 1, 'no': 1}", unique = true)])
@@ -24,6 +25,15 @@ class Match {
     @Field(name = "no")
     var no: String? = null
 
+    @Field(name = "gameround")
+    var gameround: String? = null
+
+    @Field(name = "start_at")
+    var startAt: LocalDateTime? = null
+
+    @Field(name = "end_at")
+    var endAt: LocalDateTime? = null
+
     @Field(name = "field")
     var field: EmbeddedField? = null
 
@@ -38,4 +48,7 @@ class Match {
 
     @Field(name = "sets")
     var sets: MutableList<EmbeddedSet> = mutableListOf()
+
+    @Field(name = "audit")
+    var audit: AuditEntry = AuditEntry()
 }
