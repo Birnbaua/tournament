@@ -1,6 +1,6 @@
 package at.birnbaua.tournament.data.document.sub
 
-class EmbeddedResult{
+class EmbeddedResult(var team: EmbeddedTeam) {
     var points: Long = 0
     var gamePoints: Long = 0
     var ownGamePoints: Long = 0

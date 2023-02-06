@@ -2,6 +2,8 @@ package at.birnbaua.tournament.data.document
 
 import at.birnbaua.tournament.data.document.sub.EmbeddedGroup
 import at.birnbaua.tournament.data.document.sub.EmbeddedResult
+import at.birnbaua.tournament.data.document.sub.gameround.GameroundConfig
+import at.birnbaua.tournament.data.document.sub.gameround.MatchMakingConfig
 import at.birnbaua.tournament.util.Tree
 import com.fasterxml.jackson.annotation.JsonInclude
 import org.bson.types.ObjectId
@@ -40,6 +42,9 @@ class Gameround {
 
     @Field(name = "results")
     var results: MutableList<EmbeddedResult> = mutableListOf()
+
+    @Field(name = "match_making_config")
+    var matchMakingConfig: MutableMap<String,GameroundConfig> = mutableMapOf()
 
     @Field(name = "audit")
     var audit: AuditEntry = AuditEntry()

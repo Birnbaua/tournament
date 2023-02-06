@@ -34,9 +34,23 @@ class Tree<K,V> {
         return this.entries[key]!!.values
     }
 
-    fun getAll() : List<V> {
+    fun getAllValues() : List<V> {
         if(isEmpty()) return listOf()
         return getAllValuesOf(null)
+    }
+
+    fun getAllNodes() : List<TreeEntry<K,V>> {
+        return getAllChildren(null)
+    }
+
+    fun getAllChildren(key: K?) : List<TreeEntry<K,V>> {
+        if(this.entries.containsKey(key).not()) {
+            return listOf()
+        }
+        if(this.entries[key]!!.children.isNotEmpty()) {
+            return this.entries[key]!!.children.flatMap { getAllChildren(it) }
+        }
+        return listOf(this.entries[key]!!)
     }
 
     fun isEmpty() : Boolean { return this.entries.isEmpty() }
