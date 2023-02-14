@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class ResultService {
+    /*
 
     fun generateResults(gr: Gameround, matches: List<Match>) : List<EmbeddedResult> {
 
@@ -212,4 +213,6 @@ class ResultService {
             }
         }
     }
+
+     */
 }

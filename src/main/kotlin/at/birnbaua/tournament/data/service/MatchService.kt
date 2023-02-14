@@ -26,7 +26,7 @@ class MatchService {
     fun deleteAllByTournamentAndNoIn(tournament: String, no: List<String> ) : Mono<Long> { return repo.deleteAllByTournamentAndNoIn(tournament, no) }
 
     @Transactional(isolation = Isolation.READ_COMMITTED)
-    fun updateTeamNameByTournamentAndNo(tournament: String?, no: String?, new: String?) : Mono<Long> {
+    fun updateTeamNameByTournamentAndNo(tournament: String?, no: Int?, new: String?) : Mono<Long> {
         log.trace("Update team name request for tournament: $tournament with no: $no and new name: $new ")
         return repo.updateTeamNameByTournamentAndNo(tournament, no, new)
     }

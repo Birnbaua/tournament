@@ -26,13 +26,13 @@ class TeamService {
 
     fun insert(entity: Team) : Mono<Team> { return repo.insert(entity) }
     fun findById(id: ObjectId) : Mono<Team> { return repo.findById(id) }
-    fun findByTournamentAndNo(tournament: String, no: String) : Mono<Team> { return repo.findByTournamentAndNo(tournament, no)}
+    fun findByTournamentAndNo(tournament: String, no: Int) : Mono<Team> { return repo.findByTournamentAndNo(tournament, no)}
     fun findAllByTournament(tournament: String) : Flux<Team> { return repo.findAllByTournament(tournament) }
-    fun deleteByTournamentAndNo(tournament: String, no: String) : Mono<Long> { return repo.deleteByTournamentAndNo(tournament, no) }
+    fun deleteByTournamentAndNo(tournament: String, no: Int) : Mono<Long> { return repo.deleteByTournamentAndNo(tournament, no) }
     fun deleteAllByTournament(tournament: String) : Mono<Long> { return repo.deleteAllByTournament(tournament) }
-    fun deleteAllByTournamentAndNoIn(tournament: String, no: List<String> ) : Mono<Long> { return repo.deleteAllByTournamentAndNoIn(tournament, no) }
+    fun deleteAllByTournamentAndNoIn(tournament: String, no: List<Int> ) : Mono<Long> { return repo.deleteAllByTournamentAndNoIn(tournament, no) }
 
-    fun existsByTournamentAndNo(tournament: String, no: String) : Mono<Boolean> { return repo.existsByTournamentAndNo(tournament,no) }
+    fun existsByTournamentAndNo(tournament: String, no: Int) : Mono<Boolean> { return repo.existsByTournamentAndNo(tournament,no) }
 
     @Transactional(isolation = Isolation.READ_COMMITTED)
     fun upsert(entity: Team) : Mono<Team> {

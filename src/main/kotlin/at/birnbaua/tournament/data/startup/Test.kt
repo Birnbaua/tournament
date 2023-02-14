@@ -1,8 +1,11 @@
 package at.birnbaua.tournament.data.startup
 
+import at.birnbaua.tournament.config.tournament.feizi.GroupInternalRound
 import at.birnbaua.tournament.data.document.Match
+import at.birnbaua.tournament.data.document.Team
 import at.birnbaua.tournament.data.document.sub.EmbeddedTeam
 import at.birnbaua.tournament.data.service.MatchService
+import at.birnbaua.tournament.data.service.gen.GameroundGeneratingService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Configuration
 import org.springframework.scheduling.annotation.EnableScheduling
@@ -15,21 +18,20 @@ class Test {
     @Autowired
     private lateinit var ms: MatchService
 
+    @Autowired
+    private lateinit var ggs: GameroundGeneratingService
+
     @Scheduled(initialDelay = 500, fixedDelay = 1000*60)
     fun test() {
-        val t = "TEST"
-        ms.deleteAllByTournament(t).subscribe()
-        val teamA = EmbeddedTeam()
-        teamA.no = "1"
-        teamA.name = "UNCHANGED"
-        val match = Match()
-        match.tournament = t
-        match.no = "1"
-        match.teamA = teamA
-        match.teamB = teamA
-        match.referee = teamA
-        ms.insert(match).subscribe()
-        ms.updateTeamNameByTournamentAndNo(t, "1","EUREKA!").subscribe()
-        ms.findAllByTournament(t).map { it.teamA }.subscribe {println(it!!.name)}
+        val teams = (0..10)
+            .map {
+                val team = Team()
+                team.no = it
+                team.name = "Team $it"
+                team
+            }
+        val groupsNumber = if(teams.size%5 == 0) teams.size/5 else teams.size/5 + 1
+        val template = GroupInternalRound().genGameroundTemplate("test round", "test desc",groupsNumber)
+        ggs.generate(template, teams).groups.forEach{ println(it.teams) }
     }
 }

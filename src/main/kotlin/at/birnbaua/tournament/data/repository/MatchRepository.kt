@@ -23,7 +23,7 @@ interface MatchRepository : ReactiveMongoRepository<Match,ObjectId> {
         "{\$set: {'team_b.name': {\$cond: { if: {\$eq: ['\$team_b.no',?1] }, then: ?2, else: '\$team_b.name' } } } }",
         "{\$set: {'referee.name': {\$cond: { if: {\$eq: ['\$referee.no',?1] }, then: ?2, else: '\$referee.name' } } } }"
     ])
-    fun updateTeamNameByTournamentAndNo(tournament: String?, no: String?, name: String?) : Mono<Long>
+    fun updateTeamNameByTournamentAndNo(tournament: String?, no: Int?, name: String?) : Mono<Long>
 
     @Query(value = "{'tournament': ?0}")
     @Update(pipeline = ["{\$set: {'field.name': {\$cond: { if: {\$eq: ['\$field.no',?1] }, then: ?2, else: '\$field.name' } } } }"])

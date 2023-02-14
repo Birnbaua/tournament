@@ -20,10 +20,10 @@ class Team {
     var tournament: String? = null
 
     @Field(name = "no")
-    var no: String? = null
+    var no: Int = 0
 
     @Field(name = "name")
-    var name: String? = null
+    var name: String = ""
 
     @Field(name = "desc", write = Field.Write.NON_NULL)
     var desc: String? = null

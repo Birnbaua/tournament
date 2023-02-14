@@ -1,0 +1,43 @@
+package at.birnbaua.tournament.data.document.template
+
+import at.birnbaua.tournament.data.document.sub.gameround.MatchMakingConfig
+import at.birnbaua.tournament.util.Tree
+import org.bson.types.ObjectId
+import org.springframework.data.annotation.Id
+import org.springframework.data.mongodb.core.mapping.Document
+import org.springframework.data.mongodb.core.mapping.Field
+
+@Document(collection = "gameround_template")
+class GameroundTemplate {
+
+    @Id
+    @Field(name = "_id")
+    var id: ObjectId? = null
+
+    @Field(name = "template_name")
+    var name: String = "Insert template name"
+
+    @Field(name = "template_desc")
+    var desc: String = "Insert template description"
+
+    @Field(name = "gameround_number")
+    var gameroundNumber: Int = 0
+
+    @Field(name = "gameround_name")
+    var gameroundName: String = "Insert gameround name!"
+
+    @Field(name = "gameround_desc")
+    var gameroundDesc: String = "Insert gameround description"
+
+    @Field(name = "group_binding")
+    var groupBinding: Tree<String,Int> = Tree()
+
+    @Field(name = "default_group_size")
+    var defaultGroupSize: Int = 5
+
+    @Field(name = "flatten_groups_on_improper_team_number")
+    var flattenGroupsOnImproperTeamNumber: Boolean = false
+
+    @Field(name = "match_making_config")
+    var matchMakingConfig: MutableMap<String?,MatchMakingConfig> = mutableMapOf()
+}

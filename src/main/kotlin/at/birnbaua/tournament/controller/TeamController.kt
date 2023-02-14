@@ -18,7 +18,7 @@ class TeamController {
     fun getAll(@PathVariable tournament: String) : Flux<Team> { return service.findAllByTournament(tournament) }
 
     @GetMapping("/{no}")
-    fun get(@PathVariable tournament: String, @PathVariable no: String) : Mono<Team> { return service.findByTournamentAndNo(tournament,no) }
+    fun get(@PathVariable tournament: String, @PathVariable no: Int) : Mono<Team> { return service.findByTournamentAndNo(tournament,no) }
 
     @PostMapping
     fun post(@PathVariable tournament: String, @RequestBody entity: Team) : Mono<Team> {
@@ -27,21 +27,21 @@ class TeamController {
     }
 
     @PutMapping("/{no}")
-    fun put(@PathVariable tournament: String, @PathVariable no: String, @RequestBody entity: Team) : Mono<Team> {
+    fun put(@PathVariable tournament: String, @PathVariable no: Int, @RequestBody entity: Team) : Mono<Team> {
         entity.tournament = tournament
         entity.no = no
         return service.upsert(entity)
     }
 
     @PatchMapping("/{no}")
-    fun patch(@PathVariable tournament: String, @PathVariable no: String, @RequestBody entity: Team) : Mono<Team> {
+    fun patch(@PathVariable tournament: String, @PathVariable no: Int, @RequestBody entity: Team) : Mono<Team> {
         entity.tournament = tournament
         entity.no = no
         return service.patch(entity)
     }
 
     @DeleteMapping("/{no}")
-    fun deleteById(@PathVariable tournament: String, @PathVariable no: String) : Mono<Long> { return service.deleteByTournamentAndNo(tournament,no) }
+    fun deleteById(@PathVariable tournament: String, @PathVariable no: Int) : Mono<Long> { return service.deleteByTournamentAndNo(tournament,no) }
 
     @DeleteMapping
     fun deleteAll(@PathVariable tournament: String) : Mono<Long> { return service.deleteAllByTournament(tournament) }

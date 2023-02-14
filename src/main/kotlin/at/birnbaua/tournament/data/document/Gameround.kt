@@ -25,7 +25,7 @@ class Gameround {
     var tournament: String? = null
 
     @Field(name = "no")
-    var no: String? = null
+    var no: Int = 0
 
     @Field(name = "name")
     var name: String = ""
@@ -38,13 +38,13 @@ class Gameround {
     var groups: MutableList<EmbeddedGroup> = mutableListOf()
 
     @Field(name = "group_binding")
-    var groupBinding: Tree<String,String> = Tree()
+    var groupBinding: Tree<String,Int> = Tree()
 
     @Field(name = "results")
     var results: MutableList<EmbeddedResult> = mutableListOf()
 
     @Field(name = "match_making_config")
-    var matchMakingConfig: MutableMap<String,GameroundConfig> = mutableMapOf()
+    var matchMakingConfigs: MutableMap<String?,MatchMakingConfig> = mutableMapOf()
 
     @Field(name = "audit")
     var audit: AuditEntry = AuditEntry()
