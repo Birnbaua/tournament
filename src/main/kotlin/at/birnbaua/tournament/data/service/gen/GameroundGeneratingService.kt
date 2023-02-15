@@ -21,7 +21,7 @@ class GameroundGeneratingService {
         gr.desc = template.gameroundDesc
         gr.groupBinding = template.groupBinding
         gr.matchMakingConfigs = template.matchMakingConfig
-        gr.groups.addAll(toGroups(template, teams.sortedBy { it.no }))
+        gr.groups.addAll(toGroups(template, teams))
         return gr
     }
 

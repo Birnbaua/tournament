@@ -91,7 +91,7 @@ class GroupInternalRound() {
         val grt = GameroundTemplate()
         grt.groupBinding.addOrReplace(null, setOf("PROFESSIONAL","HOBBY"), listOf())
         grt.groupBinding.addOrReplace("PROFESSIONAL", setOf(), (0 until 4).toList())
-        grt.groupBinding.addOrReplace("PRO", setOf(), (4 until no).toList())
+        grt.groupBinding.addOrReplace("HOBBY", setOf(), (4 until no).toList())
         grt.matchMakingConfig[null] = genMatchMakingConfig()
         grt.defaultGroupSize = 5
         grt.flattenGroupsOnImproperTeamNumber = true
