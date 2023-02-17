@@ -5,12 +5,12 @@ import at.birnbaua.tournament.data.document.Match
 import at.birnbaua.tournament.data.document.sub.EmbeddedResult
 import at.birnbaua.tournament.data.document.sub.EmbeddedTeam
 import at.birnbaua.tournament.data.document.sub.result.*
+import at.birnbaua.tournament.data.service.feizi.OrderProperty
 import org.springframework.stereotype.Service
 
 @Service
 class ResultService {
-    /*
-
+ /*
     fun generateResults(gr: Gameround, matches: List<Match>) : List<EmbeddedResult> {
 
     }
@@ -55,7 +55,7 @@ class ResultService {
         if(isRelative) { groupMatches.removeAt(i) }
     }
 
-    private fun getComparator(matches: List<Match>, config: ResultOrderingConfig.Ordering, isInternal: Boolean = true) : Comparator<ResultEmbedded> {
+    private fun getComparator(matches: List<Match>, config: ResultOrderingConfig.Ordering, isInternal: Boolean = true) : Comparator<EmbeddedResult> {
         return Comparator { o1, o2 ->
             var c = 0L
             var i = 0
@@ -68,8 +68,8 @@ class ResultService {
                     OrderProperty.GAME_POINTS -> c = o1.gamePoints - o2.gamePoints
                     OrderProperty.OWN_GAME_POINTS -> c = o1.ownGamePoints - o2.ownGamePoints
                     OrderProperty.OPPONENT_GAME_POINTS -> c = o1.opponentGamePoints - o2.opponentGamePoints
-                    OrderProperty.DIRECT_MATCHES -> c = compareDirectMatches(matches,o1,o2,false)
-                    OrderProperty.DIRECT_MATCHES_WITH_HOME_GAMES -> compareDirectMatches(matches,o1,o2,true)
+                    OrderProperty.DIRECT_MATCHES -> c = compareDirectMatches(matches,o1.team,o2.team,false)
+                    OrderProperty.DIRECT_MATCHES_WITH_HOME_GAMES -> compareDirectMatches(matches,o1.team,o2.team,true)
                     OrderProperty.TEAM_NO -> o1.team.no - o2.team.no
                     OrderProperty.EXTERNAL_RANK -> o2.externalRank - o1.externalRank
                     OrderProperty.INTERNAL_RANK -> o2.internalRank - o1.internalRank
@@ -99,7 +99,7 @@ class ResultService {
         }
     }
 
-    private fun genResults(matches: List<Match>, map: Map<TeamEmbedded,ResultEmbedded>, config: MatchResultConfig) {
+    private fun genResults(matches: List<Match>, map: Map<EmbeddedTeam,EmbeddedResult>, config: MatchResultConfig) {
         matches.forEach { m ->
             map[m.teamA]!!.ownGamePoints += getGamePoints(m, m.teamA!!)
             map[m.teamA]!!.opponentGamePoints  += getGamePoints(m, m.teamB!!)
@@ -214,5 +214,5 @@ class ResultService {
         }
     }
 
-     */
+  */
 }

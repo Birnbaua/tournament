@@ -1,4 +1,4 @@
-package at.birnbaua.tournament.data.document.sub.result
+package at.birnbaua.tournament.data.service.feizi
 
 enum class OrderProperty {
     EXTERNAL_RANK,
@@ -14,5 +14,6 @@ enum class OrderProperty {
     DRAWS,
     DEFEATS,
     INTERNAL_CORRECTION,
-    EXTERNAL_CORRECTION
+    EXTERNAL_CORRECTION,
+    RANDOM
 }

@@ -25,6 +25,12 @@ class GameroundGeneratingService {
         return gr
     }
 
+    fun generate(template: GameroundTemplate, oldGroups: List<EmbeddedGroup>) : Gameround {
+        val gr = Gameround()
+
+        return gr
+    }
+
     private fun toGroups(template: GameroundTemplate, teams: List<Team>) : List<EmbeddedGroup> {
         val groups: MutableList<EmbeddedGroup> = mutableListOf()
         var group = EmbeddedGroup()
