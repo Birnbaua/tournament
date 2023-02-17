@@ -32,7 +32,7 @@ class SimpleOrderService {
             sortedInternal
                 .forEachIndexed { index, result ->
                     if(result.hasCollidingRankInternal) {
-                        result.internalRank = getRankOfCollision(sortedInternal, index, orderConfig, true)
+                        result.internalRank = getRankOfCollision(sortedInternal, index, orderConfig, true, 0)
                     } else {
                         result.internalRank = index.toLong()
                     }
@@ -42,23 +42,23 @@ class SimpleOrderService {
             .sortedWith(getComparator(orderConfig.groupExternalOrdering, isInternal = false))
             .forEachIndexed { index, result ->
                 if(result.hasCollidingRankExternal) {
-
+                    result.externalRank = getRankOfCollision(results,index,orderConfig,false, externalOffset)
                 } else {
                     result.externalRank = index.toLong()
                 }
             }
     }
 
-    private fun getRankOfCollision(results: List<SimpleResult>, index: Int, orderConfig: SimpleOrderConfig, isInternal: Boolean) : Long {
+    private fun getRankOfCollision(results: List<SimpleResult>, index: Int, orderConfig: SimpleOrderConfig, isInternal: Boolean, offset: Int = 0) : Long {
         return if(index != 0) {
             val orderProperties = if(isInternal) orderConfig.groupInternalOrdering else orderConfig.groupExternalOrdering
             return if(getComparator(orderProperties, isInternal = true).compare(results[index-1],results[index]) == 0) {
                 return if(isInternal) results[index-1].internalRank else results[index-1].externalRank
             } else {
-                index.toLong()
+                index.toLong() + offset
             }
         } else {
-            0
+            0L + offset
         }
     }
 
