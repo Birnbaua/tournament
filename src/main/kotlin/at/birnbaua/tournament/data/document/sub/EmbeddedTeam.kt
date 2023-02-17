@@ -9,4 +9,13 @@ data class EmbeddedTeam (
 
     @Field(name = "name")
     var name: String = ""
-)
+) {
+    override fun hashCode(): Int { return no.hashCode() }
+    override fun equals(other: Any?): Boolean {
+        return if(other is EmbeddedTeam) {
+            other.no == this.no
+        } else {
+            false
+        }
+    }
+}
