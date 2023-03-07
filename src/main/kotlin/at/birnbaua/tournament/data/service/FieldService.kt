@@ -26,9 +26,9 @@ class FieldService {
 
     fun insert(entity: Field) : Mono<Field> { return repo.insert(entity) }
     fun findById(id: ObjectId) : Mono<Field> { return repo.findById(id) }
-    fun findByTournamentAndNo(tournament: String, no: String) : Mono<Field> { return repo.findByTournamentAndNo(tournament, no)}
+    fun findByTournamentAndNo(tournament: String, no: Int) : Mono<Field> { return repo.findByTournamentAndNo(tournament, no)}
     fun findAllByTournament(tournament: String) : Flux<Field> { return repo.findAllByTournament(tournament) }
-    fun deleteByTournamentAndNo(tournament: String, no: String) : Mono<Long> { return repo.deleteByTournamentAndNo(tournament, no) }
+    fun deleteByTournamentAndNo(tournament: String, no: Int) : Mono<Long> { return repo.deleteByTournamentAndNo(tournament, no) }
     fun deleteAllByTournament(tournament: String) : Mono<Long> { return repo.deleteAllByTournament(tournament) }
 
     fun upsert(entity: Field) : Mono<Field> {

@@ -18,4 +18,13 @@ class EmbeddedGroup() {
         this.no = no
     }
 
+    override fun hashCode(): Int { return no.hashCode() }
+    override fun equals(other: Any?): Boolean {
+        return if(other is EmbeddedGroup) {
+            other.no == this.no
+        } else {
+            false
+        }
+    }
+
 }

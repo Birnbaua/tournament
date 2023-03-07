@@ -11,11 +11,11 @@ import reactor.core.publisher.Mono
 
 @Repository
 interface MatchRepository : ReactiveMongoRepository<Match,ObjectId> {
-    fun findByTournamentAndNo(tournament: String, no: String) : Mono<Match>
+    fun findByTournamentAndNo(tournament: String, no: Int) : Mono<Match>
     fun findAllByTournament(tournament: String) : Flux<Match>
-    fun deleteByTournamentAndNo(tournament: String, no: String) : Mono<Long>
+    fun deleteByTournamentAndNo(tournament: String, no: Int) : Mono<Long>
     fun deleteAllByTournament(tournament: String) : Mono<Long>
-    fun deleteAllByTournamentAndNoIn(tournament: String, no: List<String>) : Mono<Long>
+    fun deleteAllByTournamentAndNoIn(tournament: String, no: List<Int>) : Mono<Long>
 
     @Query(value = "{'tournament':  ?0}")
     @Update(pipeline = [
@@ -27,5 +27,5 @@ interface MatchRepository : ReactiveMongoRepository<Match,ObjectId> {
 
     @Query(value = "{'tournament': ?0}")
     @Update(pipeline = ["{\$set: {'field.name': {\$cond: { if: {\$eq: ['\$field.no',?1] }, then: ?2, else: '\$field.name' } } } }"])
-    fun updateFieldNameByTournamentAndNo(tournament: String?, no: String?, name: String?) : Mono<Long>
+    fun updateFieldNameByTournamentAndNo(tournament: String?, no: Int?, name: String?) : Mono<Long>
 }

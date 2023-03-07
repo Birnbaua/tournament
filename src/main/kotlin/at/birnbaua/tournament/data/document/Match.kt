@@ -23,7 +23,7 @@ class Match {
     var tournament: String? = null
 
     @Field(name = "no")
-    var no: String? = null
+    var no: Int = 0
 
     @Field(name = "gameround")
     var gameround: String? = null
@@ -51,4 +51,8 @@ class Match {
 
     @Field(name = "audit")
     var audit: AuditEntry = AuditEntry()
+
+    override fun toString(): String {
+        return "No: $no, Start: ${startAt?.hour}:${startAt?.minute}, Field: ${field?.no}, ${teamA?.name} vs. ${teamB?.name} with ${referee?.name}, NoOfSets: ${sets.size}"
+    }
 }

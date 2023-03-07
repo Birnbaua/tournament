@@ -11,9 +11,10 @@ class MatchTemplate {
     //used for ordering
     var no: Int = 0
     var noOfSets: Int = 3
-    var timePerSetInMinutes: BigDecimal? = BigDecimal.valueOf(20)
+    var timePerSetInMinutes: BigDecimal = BigDecimal.valueOf(20)
     var breakBetweenSetsInMinutes: BigDecimal = BigDecimal.ZERO
     var breakUntilNextMatchInMinutes: BigDecimal = BigDecimal.valueOf(5)
+    var matchNoOffset: Int = 0
     var teamA: TeamTemplate? = null
     var teamB: TeamTemplate? = null
     var referee: TeamTemplate? = null
@@ -44,5 +45,12 @@ class MatchTemplate {
         this.teamB = teamB
         this.referee = referee
         this.field = field
+    }
+
+    fun timeToNextMatchStartInMinutes() : Int {
+        return breakUntilNextMatchInMinutes
+            .plus(timePerSetInMinutes.multiply(noOfSets.toBigDecimal()))
+            .plus(if(noOfSets > 1) {(noOfSets-1).toBigDecimal().multiply(breakBetweenSetsInMinutes)} else {0.toBigDecimal()})
+            .toInt()
     }
 }

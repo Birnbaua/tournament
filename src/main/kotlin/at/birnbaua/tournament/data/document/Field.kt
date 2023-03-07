@@ -1,5 +1,6 @@
 package at.birnbaua.tournament.data.document
 
+import at.birnbaua.tournament.data.document.sub.EmbeddedField
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.index.CompoundIndex
@@ -22,7 +23,7 @@ class Field {
     var tournament: String? = null
 
     @Field(name = "no")
-    var no: String? = null
+    var no: Int = 0
 
     @Field(name = "name")
     var name: String? = null
@@ -35,4 +36,8 @@ class Field {
 
     @Field(name = "audit")
     var audit: AuditEntry = AuditEntry()
+
+    fun toEmbedded() : EmbeddedField {
+        return EmbeddedField(this.no, this.name)
+    }
 }

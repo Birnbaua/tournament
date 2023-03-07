@@ -1,5 +1,6 @@
 package at.birnbaua.tournament.data.document.sub
 
+import at.birnbaua.tournament.data.document.Team
 import org.springframework.data.mongodb.core.mapping.Field
 
 data class EmbeddedTeam (
@@ -17,5 +18,12 @@ data class EmbeddedTeam (
         } else {
             false
         }
+    }
+
+    fun toTeam() : Team {
+        val team = Team()
+        team.no = this.no
+        team.name = this.name
+        return team
     }
 }

@@ -3,6 +3,7 @@ package at.birnbaua.tournament.data.document.sub.gameround
 class MatchMakingConfig() {
 
     enum class OnMultiple{ STOP, REPEAT }
+    enum class OnSubNodes{ DONT, FIRST, ALL}
 
     var rankStartingIndex: Int = 0
     var groupStartingIndex: Int = 0
@@ -10,6 +11,7 @@ class MatchMakingConfig() {
     var startWithField: Int = 0
     var templates: MutableList<MatchTemplate> = mutableListOf()
     // if eg. the match making config is for 2 groups but the binding contains 4 groups, should the config be applied on the remaining ones or not
+    var doOnSubNodes: OnSubNodes = OnSubNodes.ALL
     var doOnMultiple: OnMultiple = OnMultiple.REPEAT
 
     constructor(rankStartingIndex: Int, groupStartingIndex: Int, fieldStartingIndex: Int, startWithField: Int, templates: MutableList<MatchTemplate>, doOnMultiple: OnMultiple = OnMultiple.REPEAT) : this() {

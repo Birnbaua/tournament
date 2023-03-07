@@ -4,6 +4,7 @@ import at.birnbaua.tournament.data.document.sub.EmbeddedGroup
 import at.birnbaua.tournament.data.document.sub.EmbeddedResult
 import at.birnbaua.tournament.data.document.sub.gameround.GameroundConfig
 import at.birnbaua.tournament.data.document.sub.gameround.MatchMakingConfig
+import at.birnbaua.tournament.data.service.feizi.SimpleOrderConfig
 import at.birnbaua.tournament.data.service.feizi.SimpleResult
 import at.birnbaua.tournament.util.Tree
 import com.fasterxml.jackson.annotation.JsonInclude
@@ -41,11 +42,17 @@ class Gameround {
     @Field(name = "group_binding")
     var groupBinding: Tree<String,Int> = Tree()
 
+    @Field(name = "order_config")
+    var orderConfig: SimpleOrderConfig = SimpleOrderConfig()
+
     @Field(name = "results")
     var results: MutableList<SimpleResult> = mutableListOf()
 
     @Field(name = "match_making_config")
     var matchMakingConfigs: MutableMap<String?,MatchMakingConfig> = mutableMapOf()
+
+    @Field(name = "match_no_offset")
+    var matchNoOffset: Int = 0
 
     @Field(name = "audit")
     var audit: AuditEntry = AuditEntry()

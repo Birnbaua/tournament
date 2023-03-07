@@ -3,6 +3,8 @@ package at.birnbaua.tournament.config.tournament.feizi
 import at.birnbaua.tournament.data.document.sub.gameround.MatchMakingConfig
 import at.birnbaua.tournament.data.document.sub.gameround.MatchTemplate
 import at.birnbaua.tournament.data.document.template.GameroundTemplate
+import at.birnbaua.tournament.data.service.feizi.OrderProperty
+import at.birnbaua.tournament.data.service.feizi.SimpleOrderConfig
 
 @Suppress("unused")
 class GroupInternalRound() {
@@ -10,6 +12,7 @@ class GroupInternalRound() {
     var setTime = 8
     var setBreakTime = 0
     var matchBreakTime = 5
+    var matchNumberOffset = 0
     var flattenTeamNumberOfGroups: Boolean = true
 
     constructor(noOfSets: Int, setTime: Int, setBreakTime: Int, matchBreakTime: Int) : this() {
@@ -66,12 +69,26 @@ class GroupInternalRound() {
     }
 
     fun genGameroundTemplate(name: String, desc: String, numberOfGroups: Int = 1) : GameroundTemplate {
-        return when(numberOfGroups) {
-            1,2,3,4 -> genSmall(name,desc,numberOfGroups)
-            5,6,7,8 -> genMedium(name,desc,numberOfGroups)
-            9,10,11,12 -> genLarge(name,desc,numberOfGroups)
+        val template =  when(numberOfGroups) {
+            1,2 -> genSmall(name,desc,numberOfGroups)
+            3,4 -> genMedium(name,desc,numberOfGroups)
+            5,6,7,8 -> genLarge(name,desc,numberOfGroups)
+            9,10,11,12 -> genXLarge(name,desc,numberOfGroups)
             else -> throw IllegalArgumentException("The number of group needs to be between 1 and 12!")
         }
+        template.orderConfig = genOrderConfig()
+        return template
+    }
+
+    private fun genOrderConfig(): SimpleOrderConfig {
+        val config = SimpleOrderConfig()
+        config.pointsPerSetWon = 2
+        config.pointsPerSetDraw = 1
+        config.pointsPerMatchWon = 0
+        config.pointsPerMatchDraw = 0
+        config.groupInternalOrdering = listOf(OrderProperty.POINTS,OrderProperty.GAME_POINTS,OrderProperty.EXTERNAL_CORRECTION,OrderProperty.INTERNAL_CORRECTION)
+        config.groupExternalOrdering = listOf(OrderProperty.INTERNAL_RANK,OrderProperty.POINTS,OrderProperty.GAME_POINTS,OrderProperty.EXTERNAL_CORRECTION)
+        return config
     }
 
     private fun genSmall(name: String, desc: String, no: Int) : GameroundTemplate {
@@ -90,8 +107,8 @@ class GroupInternalRound() {
     private fun genMedium(name: String, desc: String, no: Int) : GameroundTemplate {
         val grt = GameroundTemplate()
         grt.groupBinding.addOrReplace(null, setOf("PROFESSIONAL","HOBBY"), listOf())
-        grt.groupBinding.addOrReplace("PROFESSIONAL", setOf(), (0 until 4).toList())
-        grt.groupBinding.addOrReplace("HOBBY", setOf(), (4 until no).toList())
+        grt.groupBinding.addOrReplace("PROFESSIONAL", setOf(), (0 until 2).toList())
+        grt.groupBinding.addOrReplace("HOBBY", setOf(), (2 until no).toList())
         grt.matchMakingConfig[null] = genMatchMakingConfig()
         grt.defaultGroupSize = 5
         grt.flattenGroupsOnImproperTeamNumber = true
@@ -103,6 +120,21 @@ class GroupInternalRound() {
     }
 
     private fun genLarge(name: String, desc: String, no: Int) : GameroundTemplate {
+        val grt = GameroundTemplate()
+        grt.groupBinding.addOrReplace(null, setOf("PROFESSIONAL","HOBBY"), listOf())
+        grt.groupBinding.addOrReplace("PROFESSIONAL", setOf(), (0 until 4).toList())
+        grt.groupBinding.addOrReplace("HOBBY", setOf(), (4 until 8).toList())
+        grt.matchMakingConfig[null] = genMatchMakingConfig()
+        grt.defaultGroupSize = 5
+        grt.flattenGroupsOnImproperTeamNumber = true
+        grt.name = "Template $name of style <Feizi> with $no groups"
+        grt.desc = desc
+        grt.gameroundName = name
+        grt.desc = desc
+        return grt
+    }
+
+    private fun genXLarge(name: String, desc: String, no: Int) : GameroundTemplate {
         val grt = GameroundTemplate()
         grt.groupBinding.addOrReplace(null, setOf("PROFESSIONAL","HOBBY A","HOBBY B"), listOf())
         grt.groupBinding.addOrReplace("PROFESSIONAL", setOf(), (0 until 4).toList())

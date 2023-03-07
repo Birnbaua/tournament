@@ -27,6 +27,26 @@ class Tree<K,V> {
         return this.entries[key]!!.values
     }
 
+    fun getFirstLeafNode(key: K?) : TreeEntry<K,V> {
+        if(exists(key).not()) throw NoSuchElementException("This tree does not contain a node with the key: $key")
+        if(this.entries[key]!!.children.isNotEmpty()) {
+            return getFirstLeafNode(this.entries[key]!!.children.first())
+        }
+        return this.entries[key]!!
+    }
+
+    fun getAllLeafNodes(key: K?) : List<TreeEntry<K,V>> {
+        if(exists(key).not()) throw NoSuchElementException("This tree does not contain a node with the key: $key")
+        if(this.entries[key]!!.children.isNotEmpty()) {
+            return this.entries[key]!!.children.flatMap { getAllLeafNodes(it) }.toList()
+        }
+        return listOf(this.entries[key]!!)
+    }
+
+    fun exists(key: K?) : Boolean {
+        return this.entries.containsKey(key)
+    }
+
     fun getAllLeafValuesOf(key: K?) : List<V> {
         if(this.entries[key]!!.children.isNotEmpty()) {
             return this.entries[key]!!.children.flatMap { getAllLeafValuesOf(it) }
