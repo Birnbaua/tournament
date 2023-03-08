@@ -16,4 +16,8 @@ class SimpleResult(var team: EmbeddedTeam) {
     var externalCorrection: Long = 0
     var hasCollidingRankInternal: Boolean = false
     var hasCollidingRankExternal: Boolean = false
+
+    override fun toString(): String {
+        return "Team ${team.no} | p: $points, gP: $gamePoints, iR: $internalRank, eR: $externalRank, iK: $hasCollidingRankInternal, eK: $hasCollidingRankExternal"
+    }
 }

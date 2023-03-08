@@ -115,27 +115,25 @@ class GameroundGeneratingService {
     }
 
     fun flattenGroups(groups: List<EmbeddedGroup>, defaultGroupSize: Int) {
-        val differenceToDefaultSize = defaultGroupSize - groups.last().teams.size
         val targetGroupSize = (defaultGroupSize - 1) % groups.size
         log.debug("Start flattening with ${groups.size} groups to target-group-size: $targetGroupSize")
-        flatten(groups, targetGroupSize, differenceToDefaultSize)
+        flatten(groups, targetGroupSize)
         log.debug("Flattened: ${groups.map { it.teams.size }}")
     }
 
-    private fun flatten(groups: List<EmbeddedGroup>, targetGroupSize: Int, remaining: Int) {
-        log.debug("Groups size: ${groups.size}")
-        if(groups.size > 1 && groups.last().teams.size != targetGroupSize) {
+
+    private fun flatten(groups: List<EmbeddedGroup>, targetGroupSize: Int) {
+        while(groups.size > 1 && groups.last().teams.size < targetGroupSize) {
             val team = groups[groups.size - 2].teams.removeLast()
             groups.last().teams.add(0, team)
         }
-        if(remaining > 0 && groups.last().teams.size != targetGroupSize) {
-            flatten(groups, targetGroupSize, remaining.dec())
-        } else if(groups.size > 1 && groups.last().teams.size != groups[groups.size-2].teams.size) {
+        if(groups.size > 1 && groups[groups.size - 2].teams.size < targetGroupSize) {
             val newList = ArrayList<EmbeddedGroup>(groups)
             newList.removeLast()
-            flatten(newList, targetGroupSize, remaining.dec())
+            flatten(newList, targetGroupSize)
         }
     }
+
 
     private fun genDataFromTemplate(template: GameroundTemplate, gameroundNumber: Int? = null) : Gameround {
         val gr = Gameround()

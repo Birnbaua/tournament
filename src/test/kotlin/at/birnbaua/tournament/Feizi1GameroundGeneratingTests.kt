@@ -258,6 +258,7 @@ class Feizi1GameroundGeneratingTests {
         assert(gr.groups.size == teams/5 +1)
         assert(gr.groups.last().teams.size == 4)
         gr.groups.subList(0,gr.groups.size - 1).forEach { group -> assert(group.teams.size == 5) }
+        checkOrder(gr)
     }
 
     private fun check3TooMuch(gr: Gameround, teams: Int) {
@@ -265,6 +266,7 @@ class Feizi1GameroundGeneratingTests {
         assert(gr.groups[gr.groups.size - 2].teams.size == 4)
         assert(gr.groups.last().teams.size == 4)
         gr.groups.subList(0,gr.groups.size - 2).forEach { group -> assert(group.teams.size == 5) }
+        checkOrder(gr)
     }
 
     private fun check2TooMuch(gr: Gameround, teams: Int) {
@@ -273,6 +275,7 @@ class Feizi1GameroundGeneratingTests {
         assert(gr.groups[gr.groups.size - 2].teams.size == 4)
         assert(gr.groups.last().teams.size == 4)
         gr.groups.subList(0,gr.groups.size - 3).forEach { group -> assert(group.teams.size == 5) }
+        checkOrder(gr)
     }
 
     private fun check1TooMuch(gr: Gameround, teams: Int) {
@@ -282,12 +285,29 @@ class Feizi1GameroundGeneratingTests {
         assert(gr.groups[gr.groups.size - 2].teams.size == 4)
         assert(gr.groups.last().teams.size == 4)
         gr.groups.subList(0,gr.groups.size - 4).forEach { group -> assert(group.teams.size == 5) }
+        checkOrder(gr)
     }
 
     private fun checkOptimalFit(gr: Gameround, teams: Int) {
         assert(gr.groups.size == teams/5)
         assert(0 == teams%5)
         gr.groups.forEach { group -> assert(group.teams.size == 5) }
+        checkOrder(gr)
+    }
+
+    private fun checkOrder(gr: Gameround) {
+        var index = 0
+        val teams = gr.groups.flatMap { it.teams }
+        for(team in teams) {
+            if(index > 0) {
+                if(team.no > teams[index-1].no) {
+                    assert(true)
+                } else {
+                    assert(false)
+                }
+            }
+            index += 1
+        }
     }
     private fun generateGameround(noOfTeams: Int) : Gameround {
         val noOfGroups = if(noOfTeams % 5 == 0) noOfTeams/5 else noOfTeams/5 +1
