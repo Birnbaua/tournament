@@ -16,8 +16,7 @@ class SimpleOrderService {
     private val log: Logger = LoggerFactory.getLogger(SimpleOrderService::class.java)
 
     init {
-        println("Trace enabled: ${log.isTraceEnabled}")
-        println("Debug enabled: ${log.isDebugEnabled}")
+        log.info("Simple order service started...")
     }
 
     fun genResults(matches: List<Match>, results: Map<EmbeddedTeam,SimpleResult>, groups: List<EmbeddedGroup>, orderConfig: SimpleOrderConfig, externalOffset: Int) : MutableList<SimpleResult> {
@@ -172,7 +171,7 @@ class SimpleOrderService {
         )
     }
 
-    private fun getComparator(ordering: List<OrderProperty>, isInternal: Boolean = false) : Comparator<SimpleResult> {
+    fun getComparator(ordering: List<OrderProperty>, isInternal: Boolean = false) : Comparator<SimpleResult> {
         return Comparator { o1, o2 ->
             var c = 0L
             var i = 0

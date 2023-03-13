@@ -3,6 +3,7 @@ package at.birnbaua.tournament.config.tournament.feizi
 import at.birnbaua.tournament.data.document.sub.gameround.MatchMakingConfig
 import at.birnbaua.tournament.data.document.sub.gameround.MatchTemplate
 import at.birnbaua.tournament.data.document.template.GameroundTemplate
+import at.birnbaua.tournament.data.service.feizi.GroupMakingConfig
 import at.birnbaua.tournament.data.service.feizi.OrderProperty
 import at.birnbaua.tournament.data.service.feizi.SimpleOrderConfig
 
@@ -68,6 +69,13 @@ class GroupInternalRound() {
         return mmc
     }
 
+    private fun genGroupMakingConfig() : GroupMakingConfig {
+        val config = GroupMakingConfig()
+        config.isReversed = false
+        config.ordering = arrayListOf(OrderProperty.EXTERNAL_RANK,OrderProperty.TEAM_NO)
+        return config
+    }
+
     fun genGameroundTemplate(name: String, desc: String, numberOfGroups: Int = 1) : GameroundTemplate {
         val template =  when(numberOfGroups) {
             1,2 -> genSmall(name,desc,numberOfGroups)
@@ -95,6 +103,7 @@ class GroupInternalRound() {
         val grt = GameroundTemplate()
         grt.groupBinding.addOrReplace(null, setOf(), (0 until no).toList())
         grt.matchMakingConfig[null] = genMatchMakingConfig()
+        grt.groupMakingConfig[null] = genGroupMakingConfig()
         grt.defaultGroupSize = 5
         grt.name = "Template $name of style <Feizi> with $no groups"
         grt.flattenGroupsOnImproperTeamNumber = true
@@ -110,6 +119,7 @@ class GroupInternalRound() {
         grt.groupBinding.addOrReplace("PROFESSIONAL", setOf(), (0 until 2).toList())
         grt.groupBinding.addOrReplace("HOBBY", setOf(), (2 until no).toList())
         grt.matchMakingConfig[null] = genMatchMakingConfig()
+        grt.groupMakingConfig[null] = genGroupMakingConfig()
         grt.defaultGroupSize = 5
         grt.flattenGroupsOnImproperTeamNumber = true
         grt.name = "Template $name of style <Feizi> with $no groups"
@@ -125,6 +135,7 @@ class GroupInternalRound() {
         grt.groupBinding.addOrReplace("PROFESSIONAL", setOf(), (0 until 4).toList())
         grt.groupBinding.addOrReplace("HOBBY", setOf(), (4 until 8).toList())
         grt.matchMakingConfig[null] = genMatchMakingConfig()
+        grt.groupMakingConfig[null] = genGroupMakingConfig()
         grt.defaultGroupSize = 5
         grt.flattenGroupsOnImproperTeamNumber = true
         grt.name = "Template $name of style <Feizi> with $no groups"
@@ -141,6 +152,7 @@ class GroupInternalRound() {
         grt.groupBinding.addOrReplace("HOBBY A", setOf(), (4 until 8).toList())
         grt.groupBinding.addOrReplace("HOBBY B", setOf(), (8 until 12).toList())
         grt.matchMakingConfig[null] = genMatchMakingConfig()
+        grt.groupMakingConfig[null] = genGroupMakingConfig()
         grt.defaultGroupSize = 5
         grt.flattenGroupsOnImproperTeamNumber = true
         grt.name = "Template $name of style <Feizi> with $no groups"

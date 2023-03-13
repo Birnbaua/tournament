@@ -53,10 +53,10 @@ class GameroundTemplate {
     @Field(name = "group_making_config")
     var groupMakingConfig: MutableMap<String?,GroupMakingConfig> = mutableMapOf()
 
-    fun toGameround(no: Int = 0, offset: Int = 0) : Gameround {
+    fun toGameround() : Gameround {
         val gr = Gameround()
-        gr.no = no
-        gr.matchNoOffset = offset
+        gr.no = this.gameroundNumber
+        gr.matchNoOffset = this.matchNumberOffset
         gr.name = this.name
         gr.desc = this.desc
         gr.groupBinding = this.groupBinding

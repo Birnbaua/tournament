@@ -23,6 +23,8 @@ class MatchService {
     fun save(publisher: Publisher<Match>) : Flux<Match> { return repo.saveAll(publisher) }
     fun findByTournamentAndNo(tournament: String, no: Int) : Mono<Match> { return repo.findByTournamentAndNo(tournament, no)}
     fun findAllByTournament(tournament: String) : Flux<Match> { return repo.findAllByTournament(tournament) }
+
+    fun findAllByGameround(tournament: String, gameround: Int) : Flux<Match> { return repo.findAllByTournamentAndGameround(tournament,gameround) }
     fun deleteByTournamentAndNo(tournament: String, no: Int) : Mono<Long> { return repo.deleteByTournamentAndNo(tournament, no) }
     fun deleteAllByTournament(tournament: String) : Mono<Long> { return repo.deleteAllByTournament(tournament) }
     fun deleteAllByTournamentAndNoIn(tournament: String, no: List<Int> ) : Mono<Long> { return repo.deleteAllByTournamentAndNoIn(tournament, no) }

@@ -26,7 +26,7 @@ class Match {
     var no: Int = 0
 
     @Field(name = "gameround")
-    var gameround: String? = null
+    var gameround: Int? = null
 
     @Field(name = "start_at")
     var startAt: LocalDateTime? = null
