@@ -17,7 +17,7 @@ class Match {
 
     @Id
     @Field(name = "_id")
-    var id: ObjectId? = null
+    var id: CompositeId? = null
 
     @Field(name = "tournament")
     var tournament: String? = null

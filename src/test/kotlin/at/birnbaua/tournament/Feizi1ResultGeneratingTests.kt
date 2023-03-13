@@ -21,7 +21,9 @@ class Feizi1ResultGeneratingTests {
         val sos = SimpleOrderService()
         playMatches(matches)
         val results = sos.genResults(matches,gr.results.associateBy{ it.team },gr.groups,gr.orderConfig,0)
-        results.sortedBy { it.externalRank }.forEach { println(it) }
+        results.sortedBy { it.externalRank }.forEachIndexed { index, result ->
+            assert(result.internalRank.toInt() == index/(gr.groups.size))
+        }
     }
 
     @Test
@@ -41,6 +43,18 @@ class Feizi1ResultGeneratingTests {
         val sos = SimpleOrderService()
         val results = sos.genResults(matches,gr.results.associateBy{ it.team },gr.groups,gr.orderConfig,0)
         results.sortedBy { it.externalRank }.forEach { println(it) }
+    }
+
+    @Test
+    fun testResults60Played() {
+        val gr = genGameround(60)
+        val matches = genMatches(gr)
+        val sos = SimpleOrderService()
+        playMatches(matches)
+        val results = sos.genResults(matches,gr.results.associateBy{ it.team },gr.groups,gr.orderConfig,0)
+        results.sortedBy { it.externalRank }.forEachIndexed { index, result ->
+            assert(result.internalRank.toInt() == index/(gr.groups.size))
+        }
     }
 
     private fun genMatches(gr: Gameround) : List<Match> {

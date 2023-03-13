@@ -4,6 +4,7 @@ import at.birnbaua.tournament.data.document.sub.EmbeddedGroup
 import at.birnbaua.tournament.data.document.sub.EmbeddedResult
 import at.birnbaua.tournament.data.document.sub.gameround.GameroundConfig
 import at.birnbaua.tournament.data.document.sub.gameround.MatchMakingConfig
+import at.birnbaua.tournament.data.service.feizi.GroupMakingConfig
 import at.birnbaua.tournament.data.service.feizi.SimpleOrderConfig
 import at.birnbaua.tournament.data.service.feizi.SimpleResult
 import at.birnbaua.tournament.util.Tree
@@ -50,6 +51,9 @@ class Gameround {
 
     @Field(name = "match_making_config")
     var matchMakingConfigs: MutableMap<String?,MatchMakingConfig> = mutableMapOf()
+
+    @Field(name = "group_making_config")
+    var groupMakingConfig: MutableMap<String?, GroupMakingConfig> = mutableMapOf()
 
     @Field(name = "match_no_offset")
     var matchNoOffset: Int = 0

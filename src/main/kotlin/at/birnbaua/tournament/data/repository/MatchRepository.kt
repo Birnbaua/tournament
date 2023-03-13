@@ -1,5 +1,6 @@
 package at.birnbaua.tournament.data.repository
 
+import at.birnbaua.tournament.data.document.CompositeId
 import at.birnbaua.tournament.data.document.Match
 import org.bson.types.ObjectId
 import org.springframework.data.mongodb.repository.Query
@@ -10,7 +11,7 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 @Repository
-interface MatchRepository : ReactiveMongoRepository<Match,ObjectId> {
+interface MatchRepository : ReactiveMongoRepository<Match,CompositeId> {
     fun findByTournamentAndNo(tournament: String, no: Int) : Mono<Match>
     fun findAllByTournament(tournament: String) : Flux<Match>
     fun deleteByTournamentAndNo(tournament: String, no: Int) : Mono<Long>

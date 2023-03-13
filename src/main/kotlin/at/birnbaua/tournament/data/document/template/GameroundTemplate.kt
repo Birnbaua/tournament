@@ -1,5 +1,6 @@
 package at.birnbaua.tournament.data.document.template
 
+import at.birnbaua.tournament.data.document.Gameround
 import at.birnbaua.tournament.data.document.sub.gameround.MatchMakingConfig
 import at.birnbaua.tournament.data.service.feizi.GroupMakingConfig
 import at.birnbaua.tournament.data.service.feizi.SimpleOrderConfig
@@ -50,5 +51,18 @@ class GameroundTemplate {
     var matchMakingConfig: MutableMap<String?,MatchMakingConfig> = mutableMapOf()
 
     @Field(name = "group_making_config")
-    var groupMakingConfig: MutableMap<String?, GroupMakingConfig> = mutableMapOf()
+    var groupMakingConfig: MutableMap<String?,GroupMakingConfig> = mutableMapOf()
+
+    fun toGameround(no: Int = 0, offset: Int = 0) : Gameround {
+        val gr = Gameround()
+        gr.no = no
+        gr.matchNoOffset = offset
+        gr.name = this.name
+        gr.desc = this.desc
+        gr.groupBinding = this.groupBinding
+        gr.orderConfig = this.orderConfig
+        gr.matchMakingConfigs = this.matchMakingConfig
+        gr.groupMakingConfig = this.groupMakingConfig
+        return gr
+    }
 }
