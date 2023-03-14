@@ -1,7 +1,6 @@
 package at.birnbaua.tournament.pdf
 
 import at.birnbaua.tournament.data.document.Match
-import com.fasterxml.jackson.databind.ObjectMapper
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -16,6 +15,10 @@ import java.nio.file.Files
 import kotlin.io.path.Path
 
 
+/**
+ * @author Birnbaua
+ * @since 1.0
+ */
 @Service
 class PdfService {
 
@@ -30,6 +33,11 @@ class PdfService {
         engine.setTemplateResolver(resolver)
     }
 
+    /**
+     * Transforms a list of [Match] to Pdf-referee-sheets
+     * @param matches All matches which should be transformed
+     * @since 1.0
+     */
     fun matchesToPdf(matches: List<Match>) : ByteArray {
         log.info("Transforming matches to pdf...")
         return toPdf(generateMatchesHTML(matches))
@@ -40,6 +48,11 @@ class PdfService {
         return matches.map { process(it) }
     }
 
+    /**
+     * Transforms a list of HTML-Pages to a single Pdf, with one HTML equals one page in the Pdf
+     * @param content All pages of the desired Pdf
+     * @since 1.0
+     */
     fun toPdf(content: List<String>) : ByteArray {
         val renderer = ITextRenderer()
         val os = ByteArrayOutputStream()

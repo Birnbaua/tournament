@@ -15,13 +15,16 @@ class GameroundTemplate {
 
     @Id
     @Field(name = "_id")
-    var id: ObjectId? = null
+    var id: String? = null
 
     @Field(name = "template_name")
     var name: String = "Insert template name"
 
     @Field(name = "template_desc")
     var desc: String = "Insert template description"
+
+    @Field(name = "tournament")
+    var tournament: String = ""
 
     @Field(name = "gameround_number")
     var gameroundNumber: Int = 0

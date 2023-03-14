@@ -21,6 +21,9 @@ class Tournament {
     @Field(name = "start")
     var start: LocalDateTime? = null
 
+    @Field(name = "gameround_templates")
+    var gameroundTemplates: MutableMap<Int,String> = mutableMapOf()
+
     @Field(name = "audit")
     var audit: AuditEntry = AuditEntry()
 }

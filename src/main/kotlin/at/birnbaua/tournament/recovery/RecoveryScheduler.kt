@@ -11,7 +11,6 @@ import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.transaction.annotation.Isolation
 import org.springframework.transaction.annotation.Transactional
-import reactor.core.scheduler.Schedulers
 
 @EnableScheduling
 @Configuration
