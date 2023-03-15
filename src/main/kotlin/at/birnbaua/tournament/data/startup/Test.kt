@@ -23,15 +23,5 @@ class Test {
 
     @Scheduled(initialDelay = 500, fixedDelay = 1000*60)
     fun test() {
-        val teams = (0..10)
-            .map {
-                val team = Team()
-                team.no = it
-                team.name = "Team $it"
-                team
-            }
-        val groupsNumber = if(teams.size%5 == 0) teams.size/5 else teams.size/5 + 1
-        val template = GroupInternalRound().genGameroundTemplate("test round", "test desc",groupsNumber)
-        ggs.generate(template, teams).groups.forEach{ println(it.teams) }
     }
 }

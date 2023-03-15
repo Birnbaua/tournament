@@ -48,7 +48,8 @@ class GameroundService {
         val fields = fs.findAllByTournament(tournament).collectList()
         val gr = findByTournamentAndNo(tournament, no)
         return Mono.zip(gr,fields)
-            .flatMapIterable { mgs.generateMatchesFeizi(it.t1,it.t2,startTime) }
+            .map { mgs.generateMatchesFeizi(it.t1,it.t2,startTime) }
+            .flatMapMany { ms.saveAll(it) }
     }
 
     fun generateGameround(tournament: String, no: Int) : Mono<Gameround> {

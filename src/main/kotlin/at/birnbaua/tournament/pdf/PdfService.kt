@@ -45,7 +45,8 @@ class PdfService {
 
     fun generateMatchesHTML(matches: List<Match>) : List<String> {
         log.info("Process matches to pdfs...")
-        return matches.map { process(it) }
+        val template = loadOrCreateTemplate()
+        return matches.map { process(it,template) }
     }
 
     /**
@@ -66,7 +67,7 @@ class PdfService {
         return os.toByteArray()
     }
 
-    fun process(match: Match) : String {
+    fun process(match: Match,template: String) : String {
         val context = Context()
         context.setVariable("name","Spiele")
         context.setVariable("gameround",match.gameround)
@@ -75,7 +76,7 @@ class PdfService {
         context.setVariable("team_a",match.teamA)
         context.setVariable("team_b",match.teamB)
         context.setVariable("referee",match.referee)
-        return engine.process(loadOrCreateTemplate(),context)
+        return engine.process(template,context)
     }
 
     fun loadOrCreateTemplate() : String {

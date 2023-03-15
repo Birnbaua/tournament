@@ -1,6 +1,7 @@
 package at.birnbaua.tournament.controller
 
 import at.birnbaua.tournament.data.document.Gameround
+import at.birnbaua.tournament.data.document.Match
 import at.birnbaua.tournament.data.service.GameroundService
 import at.birnbaua.tournament.data.service.MatchService
 import at.birnbaua.tournament.pdf.PdfService
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
+import java.time.LocalDateTime
 
 @RestController
 @RequestMapping("/\${api.tournament:#{apiProperties.tournament}}/{tournament}/\${api.gameround:#{apiProperties.gameround}}")
@@ -45,7 +47,7 @@ class GameroundController {
     fun generateGameround(@PathVariable tournament: String, @PathVariable no: Int) : Mono<Gameround> { return gs.generateGameround(tournament,no) }
 
     @GetMapping(path = ["/{no}/generate/matches"])
-    fun generateMatchesOfGameround(@PathVariable tournament: String, @PathVariable no: Int) : Mono<Gameround> { return gs.generateMatchesOf(tournament,no) }
+    fun generateMatchesOfGameround(@PathVariable tournament: String, @PathVariable no: Int) : Flux<Match> { return gs.generateMatchesOf(tournament,no,LocalDateTime.now()) }
 
     @GetMapping(path = ["/{no}/pdf"], produces = [MediaType.APPLICATION_PDF_VALUE])
     fun genPdf(@PathVariable tournament: String, @PathVariable no: Int) : Mono<ResponseEntity<ByteArray>> {
