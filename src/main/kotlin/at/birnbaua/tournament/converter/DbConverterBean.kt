@@ -1,6 +1,7 @@
 package at.birnbaua.tournament.converter
 
 import at.birnbaua.tournament.util.MapToConverter
+import at.birnbaua.tournament.util.ToMapConverter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.convert.converter.Converter
@@ -13,6 +14,7 @@ class DbConverterBean {
     fun customConversions() : MongoCustomConversions {
         val converters = mutableListOf<Converter<*,*>>()
         converters.add(MapToConverter())
+        converters.add(ToMapConverter())
         return MongoCustomConversions(converters)
     }
 }

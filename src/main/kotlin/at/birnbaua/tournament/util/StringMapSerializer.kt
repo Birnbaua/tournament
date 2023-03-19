@@ -10,11 +10,10 @@ import java.util.LinkedHashMap
 class StringMapSerializer(t: Class<LinkedHashMap<*,*>>? = LinkedHashMap::class.java) : StdSerializer<LinkedHashMap<*,*>>(t) {
 
     private val log = LoggerFactory.getLogger(StringMapSerializer::class.java)
-    private val mapper = ObjectMapper()
 
     @Suppress("UNCHECKED_CAST")
     override fun serialize(p0: LinkedHashMap<*,*>?, p1: JsonGenerator?, p2: SerializerProvider?) {
-        log.info("TEST SERIALIZER")
+        log.trace("TEST SERIALIZER")
         if (p0 != null ) {
             if (p0.containsKey(null)) {
                 p0 as LinkedHashMap<String?, Any?>
@@ -22,7 +21,12 @@ class StringMapSerializer(t: Class<LinkedHashMap<*,*>>? = LinkedHashMap::class.j
                 p0.remove(null)
                 p0["null"] = root
             }
-            p1?.writeString(mapper.writeValueAsString(p0))
+            p1?.writeStartObject()
+            p0.forEach {
+                if(it.key == null) p1?.writeObjectField("null",it.value)
+                else p1?.writeObjectField(it.key.toString(),it.value)
+            }
+            p1?.writeEndObject()
         }
     }
 }

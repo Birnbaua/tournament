@@ -35,7 +35,7 @@ class MatchTemplate {
     }
 
     constructor(no: Int, noOfSets: Int, timePerSetInMinutes: Int, breakBetweenSetsInMinutes: Int, breakUntilNextMatchInMinutes: Int,
-                teamA: TeamTemplate, teamB: TeamTemplate, referee: TeamTemplate, field: Int? = null) {
+                teamA: TeamTemplate?, teamB: TeamTemplate?, referee: TeamTemplate?, field: Int? = null) {
         this.no = no
         this.noOfSets = noOfSets
         this.timePerSetInMinutes = BigDecimal.valueOf(timePerSetInMinutes.toLong())
@@ -46,6 +46,8 @@ class MatchTemplate {
         this.referee = referee
         this.field = field
     }
+
+    constructor() : this(0,0,0,0,0,null,null,null,null)
 
     fun timeToNextMatchStartInMinutes() : Int {
         return breakUntilNextMatchInMinutes
