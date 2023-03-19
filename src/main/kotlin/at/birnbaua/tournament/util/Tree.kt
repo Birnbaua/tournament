@@ -1,5 +1,6 @@
 package at.birnbaua.tournament.util
 
+
 class Tree<K,V> {
 
     class TreeEntry<K,V>(
@@ -8,7 +9,7 @@ class Tree<K,V> {
     )
 
     var desc: String? = null
-    private var entries: MutableMap<K?,TreeEntry<K,V>> = mutableMapOf()
+    var entries: MutableMap<K?,TreeEntry<K,V>> = mutableMapOf()
 
     fun addOrReplace(key: K?, children: Set<K>, values: List<V>) {
         if(this.entries.isEmpty() && key != null) throw IllegalArgumentException("Tree must contain root node with key == null!")

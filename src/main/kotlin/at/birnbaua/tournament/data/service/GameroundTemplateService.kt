@@ -12,7 +12,7 @@ class GameroundTemplateService {
     @Autowired
     private lateinit var repo: GameroundTemplateRepository
 
-    fun insertIfNotExisting(template: GameroundTemplate) : Mono<GameroundTemplate> { return repo.insert(template).onErrorComplete() }
+    fun insertIfNotExisting(template: GameroundTemplate) : Mono<GameroundTemplate> { return repo.insert(template) }
 
     fun findById(id: String) : Mono<GameroundTemplate> { return repo.findById(id) }
     fun findByTournamentAndGameround(tournament: String, no: Int) : Mono<GameroundTemplate> { return repo.findByTournamentAndGameroundNumber(tournament, no) }

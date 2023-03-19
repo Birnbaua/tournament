@@ -30,9 +30,6 @@ class FeiziDefault {
         val defaultTournament = TournamentConfig2023().genTournamentTemplate()
         defaultTournament.id = "${defaultTournament.id}_default"
         tts.insertIfNotExisting(defaultTournament).subscribe()
-        val testTemplate = GameroundTemplate()
-        testTemplate.id = "test"
-        gts.insertIfNotExisting(testTemplate).subscribe()
         for(i in 1..12) {
             val preliminaryRound = GroupInternalRound().genGameroundTemplate("VB4222 Vorrunde","Vorrunde",i)
             preliminaryRound.id = "vb4222_0_$i"
