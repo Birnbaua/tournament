@@ -1,6 +1,6 @@
 package at.birnbaua.tournament
 
-import at.birnbaua.tournament.config.tournament.feizi.GroupInternalRound
+import at.birnbaua.tournament.config.tournament.vb4222.GroupInternalRound
 import at.birnbaua.tournament.data.document.Gameround
 import at.birnbaua.tournament.data.document.Team
 import at.birnbaua.tournament.data.service.gen.GameroundGeneratingService

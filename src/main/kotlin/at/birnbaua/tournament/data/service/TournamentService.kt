@@ -12,6 +12,7 @@ class TournamentService {
 
     @Autowired
     private lateinit var repo: TournamentRepository
+    @Autowired private lateinit var tts: TournamentTemplateService
 
     fun findAll() : Flux<Tournament> { return repo.findAll() }
     fun findById(id: String) : Mono<Tournament> { return repo.findById(id) }
@@ -22,4 +23,11 @@ class TournamentService {
 
     fun patch(entity: Tournament) : Mono<Tournament> { return repo.save(entity) }
     fun deleteById(id: String) : Mono<Void> { return repo.deleteById(id) }
+
+    fun generateAndInsertByTemplate(tournamentId: String, templateId: String) : Mono<Tournament> {
+        return tts.findById(templateId)
+            .map { it.toTournament() }
+            .doOnNext { it.id = tournamentId }
+            .flatMap { repo.insert(it) }
+    }
 }

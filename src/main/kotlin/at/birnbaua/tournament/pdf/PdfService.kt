@@ -38,12 +38,12 @@ class PdfService {
      * @param matches All matches which should be transformed
      * @since 1.0
      */
-    fun matchesToPdf(matches: List<Match>) : ByteArray {
+    fun matchesToPdf(matches: List<Match>, name: String = "Spielberichtsbogen") : ByteArray {
         log.info("Transforming matches to pdf...")
-        return toPdf(generateMatchesHTML(matches))
+        return toPdf(generateMatchesHTML(matches,name))
     }
 
-    fun generateMatchesHTML(matches: List<Match>) : List<String> {
+    fun generateMatchesHTML(matches: List<Match>, name: String = "Spielberichtsbogen") : List<String> {
         log.info("Process matches to pdfs...")
         val template = loadOrCreateTemplate()
         return matches.map { process(it,template) }
@@ -67,9 +67,9 @@ class PdfService {
         return os.toByteArray()
     }
 
-    fun process(match: Match,template: String) : String {
+    fun process(match: Match, template: String, name: String = "Spielberichtsbogen") : String {
         val context = Context()
-        context.setVariable("name","Spiele")
+        context.setVariable("title",name)
         context.setVariable("gameround",match.gameround)
         context.setVariable("match_no",match.no)
         context.setVariable("field",match.field)

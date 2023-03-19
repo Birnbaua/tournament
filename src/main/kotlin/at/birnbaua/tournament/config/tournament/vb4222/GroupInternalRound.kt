@@ -1,4 +1,4 @@
-package at.birnbaua.tournament.config.tournament.feizi
+package at.birnbaua.tournament.config.tournament.vb4222
 
 import at.birnbaua.tournament.data.document.sub.gameround.MatchMakingConfig
 import at.birnbaua.tournament.data.document.sub.gameround.MatchTemplate
@@ -9,6 +9,7 @@ import at.birnbaua.tournament.data.service.feizi.SimpleOrderConfig
 
 @Suppress("unused")
 class GroupInternalRound() {
+    var id = "vb4222_1"
     var noOfSets = 2
     var setTime = 8
     var setBreakTime = 0
@@ -84,6 +85,8 @@ class GroupInternalRound() {
             9,10,11,12 -> genXLarge(name,desc,numberOfGroups)
             else -> throw IllegalArgumentException("The number of group needs to be between 1 and 12!")
         }
+        template.id = this.id
+        template.groups = numberOfGroups
         template.orderConfig = genOrderConfig()
         return template
     }

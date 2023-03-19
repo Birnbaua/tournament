@@ -1,4 +1,4 @@
-package at.birnbaua.tournament.config.tournament.feizi
+package at.birnbaua.tournament.config.tournament.vb4222
 
 import at.birnbaua.tournament.data.document.sub.gameround.MatchMakingConfig
 import at.birnbaua.tournament.data.document.sub.gameround.MatchTemplate

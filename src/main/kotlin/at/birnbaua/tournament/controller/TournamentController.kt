@@ -38,8 +38,9 @@ class TournamentController {
     @DeleteMapping("/{id}")
     fun deleteById(@PathVariable id: String) : Mono<Void> { return service.deleteById(id) }
 
-    @DeleteMapping
-    fun deleteAll() : Mono<Void> {
-        return TODO("Basically not needed but saved for later...")
+    @GetMapping("/{id}/generate")
+    fun generateTournament(@PathVariable id: String, @RequestParam template: String) : Mono<Tournament> {
+        return service.generateAndInsertByTemplate(id,template)
     }
+
 }

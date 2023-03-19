@@ -26,6 +26,9 @@ class GameroundTemplate {
     @Field(name = "tournament")
     var tournament: String = ""
 
+    @Field(name = "groups")
+    var groups: Int = 0
+
     @Field(name = "gameround_number")
     var gameroundNumber: Int = 0
 

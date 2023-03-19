@@ -15,6 +15,9 @@ class Tournament {
     @Field(name = "name")
     var name: String? = null
 
+    @Field(name = "desc")
+    var desc: String? = null
+
     @Field(name = "title")
     var title: String? = null
 
