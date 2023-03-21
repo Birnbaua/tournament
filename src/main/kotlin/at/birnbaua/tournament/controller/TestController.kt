@@ -5,6 +5,8 @@ import at.birnbaua.tournament.data.document.Field
 import at.birnbaua.tournament.data.document.Gameround
 import at.birnbaua.tournament.data.document.Match
 import at.birnbaua.tournament.data.document.Team
+import at.birnbaua.tournament.data.document.template.GameroundTemplate
+import at.birnbaua.tournament.data.service.GameroundTemplateService
 import at.birnbaua.tournament.data.service.feizi.SimpleMatchGeneratingService
 import at.birnbaua.tournament.data.service.gen.GameroundGeneratingService
 import at.birnbaua.tournament.pdf.PdfService
@@ -15,6 +17,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.toMono
 import java.time.LocalDateTime
@@ -24,6 +27,10 @@ import java.time.LocalDateTime
 class TestController {
 
     @Autowired private lateinit var pdfService: PdfService
+    @Autowired private lateinit var gts: GameroundTemplateService
+
+    @GetMapping("/gameroundTemplates")
+    fun testGRT() : Flux<GameroundTemplate> { return gts.findAll() }
 
     @GetMapping(path = ["/pdf"], produces = [MediaType.APPLICATION_PDF_VALUE])
     fun testPdf() : Mono<ResponseEntity<ByteArray>> {

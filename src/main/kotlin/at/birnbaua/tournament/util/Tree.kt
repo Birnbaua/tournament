@@ -1,14 +1,18 @@
 package at.birnbaua.tournament.util
 
+import org.bson.codecs.pojo.annotations.BsonCreator
+import org.bson.codecs.pojo.annotations.BsonProperty
+
+
 class Tree<K,V> {
 
-    class TreeEntry<K,V>(
+    data class TreeEntry<K,V> constructor(
         var children: Set<K> = mutableSetOf(),
         var values: List<V> = mutableListOf()
     )
 
     var desc: String? = null
-    private var entries: MutableMap<K?,TreeEntry<K,V>> = mutableMapOf()
+    var entries: MutableMap<K?,TreeEntry<K,V>> = mutableMapOf()
 
     fun addOrReplace(key: K?, children: Set<K>, values: List<V>) {
         if(this.entries.isEmpty() && key != null) throw IllegalArgumentException("Tree must contain root node with key == null!")
@@ -20,7 +24,7 @@ class Tree<K,V> {
     }
     fun getValuesOf(key: K?) : List<V> { return this.entries[key]!!.values }
 
-    fun getAllValuesOf(key: K?) : List<V> {
+    private fun getAllValuesOf(key: K?) : List<V> {
         if(this.entries[key]!!.children.isNotEmpty()) {
             return this.entries[key]!!.children.flatMap { getAllValuesOf(it) }.plus(this.entries[key]!!.values)
         }
@@ -54,7 +58,7 @@ class Tree<K,V> {
         return this.entries[key]!!.values
     }
 
-    fun getAllValues() : List<V> {
+    private fun getAllValues() : List<V> {
         if(isEmpty()) return listOf()
         return getAllValuesOf(null)
     }
