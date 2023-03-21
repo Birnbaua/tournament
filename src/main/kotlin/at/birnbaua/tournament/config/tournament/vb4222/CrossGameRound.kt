@@ -22,34 +22,19 @@ class CrossGameRound() {
     private fun genMatchTemplates() : MutableList<MatchTemplate> {
         return  mutableListOf(
             MatchTemplate(0,noOfSets,setTime,setBreakTime,matchBreakTime,
-                MatchTemplate.TeamTemplate(rank = 0), MatchTemplate.TeamTemplate(rank = 2), MatchTemplate.TeamTemplate(rank = 3)
+                MatchTemplate.TeamTemplate(rank = 0), MatchTemplate.TeamTemplate(rank = 1), MatchTemplate.TeamTemplate(rank = 2)
             ),
             MatchTemplate(1,noOfSets,setTime,setBreakTime,matchBreakTime,
-                MatchTemplate.TeamTemplate(rank = 1), MatchTemplate.TeamTemplate(rank = 3), MatchTemplate.TeamTemplate(rank = 4)
-            ),
-            MatchTemplate(2,noOfSets,setTime,setBreakTime,matchBreakTime,
-                MatchTemplate.TeamTemplate(rank = 2), MatchTemplate.TeamTemplate(rank = 4), MatchTemplate.TeamTemplate(rank = 1)
-            ),
-            MatchTemplate(3,noOfSets,setTime,setBreakTime,matchBreakTime,
-                MatchTemplate.TeamTemplate(rank = 0), MatchTemplate.TeamTemplate(rank = 3), MatchTemplate.TeamTemplate(rank = 2)
-            ),
-            MatchTemplate(4,noOfSets,setTime,setBreakTime,matchBreakTime,
-                MatchTemplate.TeamTemplate(rank = 1), MatchTemplate.TeamTemplate(rank = 4), MatchTemplate.TeamTemplate(rank = 0)
-            ),
-            MatchTemplate(5,noOfSets,setTime,setBreakTime,matchBreakTime,
                 MatchTemplate.TeamTemplate(rank = 2), MatchTemplate.TeamTemplate(rank = 3), MatchTemplate.TeamTemplate(rank = 1)
             ),
-            MatchTemplate(6,noOfSets,setTime,setBreakTime,matchBreakTime,
-                MatchTemplate.TeamTemplate(rank = 0), MatchTemplate.TeamTemplate(rank = 4), MatchTemplate.TeamTemplate(rank = 3)
+            MatchTemplate(2,noOfSets,setTime,setBreakTime,matchBreakTime,
+                MatchTemplate.TeamTemplate(rank = 4), MatchTemplate.TeamTemplate(rank = 5), MatchTemplate.TeamTemplate(rank = 6)
             ),
-            MatchTemplate(7,noOfSets,setTime,setBreakTime,matchBreakTime,
-                MatchTemplate.TeamTemplate(rank = 1), MatchTemplate.TeamTemplate(rank = 2), MatchTemplate.TeamTemplate(rank = 0)
+            MatchTemplate(3,noOfSets,setTime,setBreakTime,matchBreakTime,
+                MatchTemplate.TeamTemplate(rank = 6), MatchTemplate.TeamTemplate(rank = 7), MatchTemplate.TeamTemplate(rank = 5)
             ),
-            MatchTemplate(8,noOfSets,setTime,setBreakTime,matchBreakTime,
-                MatchTemplate.TeamTemplate(rank = 3), MatchTemplate.TeamTemplate(rank = 4), MatchTemplate.TeamTemplate(rank = 2)
-            ),
-            MatchTemplate(9,noOfSets,setTime,setBreakTime,matchBreakTime,
-                MatchTemplate.TeamTemplate(rank = 0), MatchTemplate.TeamTemplate(rank = 1), MatchTemplate.TeamTemplate(rank = 4)
+            MatchTemplate(4,noOfSets,setTime,setBreakTime,matchBreakTime,
+                MatchTemplate.TeamTemplate(rank = 8), MatchTemplate.TeamTemplate(rank = 9), MatchTemplate.TeamTemplate(rank = 7)
             )
         )
     }
