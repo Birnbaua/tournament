@@ -23,6 +23,8 @@ class TournamentService {
 
     fun patch(entity: Tournament) : Mono<Tournament> { return repo.save(entity) }
     fun deleteById(id: String) : Mono<Void> { return repo.deleteById(id) }
+    fun deleteAll() : Mono<Void> { return repo.deleteAll() }
+    fun existsById(id: String) : Mono<Boolean> { return repo.existsById(id) }
 
     fun generateAndInsertByTemplate(tournamentId: String, templateId: String) : Mono<Tournament> {
         return tts.findById(templateId)

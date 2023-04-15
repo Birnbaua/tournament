@@ -6,11 +6,11 @@ import at.birnbaua.tournament.data.document.template.GameroundTemplate
 
 @Suppress("unused")
 class CrossGameRound() {
-    var noOfSets = 2
-    var setTime = 8
+    var noOfSets = 3
+    var setTime = 12
     var setBreakTime = 0
     var matchBreakTime = 5
-    var flattenTeamNumberOfGroups: Boolean = true
+    var flattenTeamNumberOfGroups: Boolean = false
 
     constructor(noOfSets: Int, setTime: Int, setBreakTime: Int, matchBreakTime: Int) : this() {
         this.noOfSets = noOfSets

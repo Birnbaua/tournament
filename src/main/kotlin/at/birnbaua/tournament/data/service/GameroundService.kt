@@ -37,6 +37,7 @@ class GameroundService {
 
     fun save(entity: Gameround) : Mono<Gameround> { return repo.save(entity) }
     fun save(publisher: Mono<Gameround>) : Mono<Gameround> { return publisher.flatMap { repo.save(it) } }
+    fun insert(entities: Iterable<Gameround>) : Flux<Gameround> { return repo.insert(entities) }
     fun findById(id: ObjectId) : Mono<Gameround> { return repo.findById(id) }
     fun findByTournamentAndNo(tournament: String, no: Int) : Mono<Gameround> { return repo.findByTournamentAndNo(tournament, no) }
     fun findAllByTournament(tournament: String) : Flux<Gameround> { return repo.findAllByTournament(tournament) }
@@ -73,8 +74,8 @@ class GameroundService {
                 .collectList()
                 .map { ggs.generateFeiziRound1(template,it,no) }
             1 -> findByTournamentAndNo(tournament, no).map { ggs.generateFeiziRound2(template,it) }
-            2 -> findByTournamentAndNo(tournament, no).map { ggs.generateFeiziRound2(template,it) }
-            3 -> findByTournamentAndNo(tournament, no).map { ggs.generateFeiziRound2(template,it) }
+            2 -> findByTournamentAndNo(tournament, no).map { ggs.generateFeiziRound3(template,it) }
+            3 -> findByTournamentAndNo(tournament, no).map { ggs.generateFeiziRound4(template,it) }
             else -> {
                 log.error("Gameround number for Feizi generation out of bound. Must be 0 <= number <= 4 but was: $no")
                 throw IllegalArgumentException("Gameround number must be within [0..3]")

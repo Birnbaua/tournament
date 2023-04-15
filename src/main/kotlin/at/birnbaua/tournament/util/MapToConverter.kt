@@ -20,7 +20,6 @@ class MapToConverter : Converter<LinkedHashMap<in String?, *>, Any> {
         mapper.registerModule(module)
     }
     override fun convert(source: LinkedHashMap<in String?, *>): Any {
-        log.info("Map to converter converted")
         val typeRef: TypeReference<LinkedHashMap<String?, *>> = object : TypeReference<LinkedHashMap<String?, *>>() {}
         val value = mapper.writeValueAsString(source).replace("\\\"","\"")
         return mapper.readValue(value,typeRef)
