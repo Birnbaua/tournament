@@ -31,3 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### recovery ###
+data/recovery/current/
+data/recovery/history/
+data/recovery/temp/

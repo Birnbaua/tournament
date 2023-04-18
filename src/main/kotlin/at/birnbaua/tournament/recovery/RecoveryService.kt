@@ -2,7 +2,6 @@ package at.birnbaua.tournament.recovery
 
 import at.birnbaua.tournament.data.document.*
 import at.birnbaua.tournament.data.service.*
-import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -13,14 +12,18 @@ import org.springframework.transaction.annotation.Transactional
 import reactor.core.publisher.Mono
 import java.nio.file.Files
 import java.nio.file.Path
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import kotlin.io.path.Path
+import kotlin.io.path.isDirectory
 
 
 @Service
 class RecoveryService {
 
     private val log: Logger = LoggerFactory.getLogger(RecoveryService::class.java)
-    private val defaultPath = "data/recovery/"
+    private val defaultPath = "data/recovery/current"
+    private val historyPath = "data/recovery/history"
 
     @Autowired private lateinit var tournamentService: TournamentService
     @Autowired private lateinit var gameroundService: GameroundService
@@ -33,6 +36,7 @@ class RecoveryService {
     fun saveAllToFile(tournament: String, path: Path = Path(defaultPath)) {
         val destination = "$path/$tournament"
         Files.createDirectories(Path.of(destination))
+        copyToHistory(tournament)
         tournamentService.findById(tournament)
             .doOnNext { log.info("Save tournament: $tournament backup to disk") }
             .subscribe { Files.write(Path.of("$destination/tournament.json"),mapper.writerWithDefaultPrettyPrinter().writeValueAsBytes(it)) }
@@ -57,28 +61,45 @@ class RecoveryService {
     @Transactional(isolation = Isolation.SERIALIZABLE)
     fun replaceTournamentInDatabase(tournament: String, path: Path = Path(defaultPath)) {
         log.info("Starting replacing tournament in db with external files...")
-        saveAllToFile(tournament,Path.of("data/temp/"))
-        Mono.just(Files.readAllBytes(Path.of("$path/tournament.json")))
-            .flatMap { tournamentService.insert(mapper.convertValue(it,Tournament::class.java)) }.subscribe()
-        Mono.just(Files.readAllBytes(Path.of("$path/gamerounds.json")))
+        saveAllToFile(tournament,Path.of("data/recovery/temp"))
+        Mono.just(Files.readString(Path.of("$path/$tournament/tournament.json")))
+            .flatMap { tournamentService.insert(mapper.readValue(it,Tournament::class.java)) }.subscribe()
+        Mono.just(Files.readString(Path.of("$path/$tournament/gamerounds.json")))
             .flatMapMany {
                 val type = mapper.typeFactory.constructCollectionType(List::class.java,Gameround::class.java)
-                gameroundService.insert(mapper.convertValue(it, type))
+                gameroundService.insert(mapper.readValue(it, type))
             }.subscribe()
-        Mono.just(Files.readAllBytes(Path.of("$path/fields.json")))
+        Mono.just(Files.readString(Path.of("$path/$tournament/fields.json")))
             .flatMapMany {
                 val type = mapper.typeFactory.constructCollectionType(List::class.java, Field::class.java)
-                gameroundService.insert(mapper.convertValue(it, type))
+                gameroundService.insert(mapper.readValue(it, type))
             }.subscribe()
-        Mono.just(Files.readAllBytes(Path.of("$path/teams.json")))
+        Mono.just(Files.readString(Path.of("$path/$tournament/teams.json")))
             .flatMapMany {
                 val type = mapper.typeFactory.constructCollectionType(List::class.java, Team::class.java)
-                gameroundService.insert(mapper.convertValue(it, type))
+                gameroundService.insert(mapper.readValue(it, type))
             }.subscribe()
-        Mono.just(Files.readAllBytes(Path.of("$path/matches.json")))
+        Mono.just(Files.readString(Path.of("$path/$tournament/matches.json")))
             .flatMapMany {
                 val type = mapper.typeFactory.constructCollectionType(List::class.java, Match::class.java)
-                gameroundService.insert(mapper.convertValue(it, type))
+                gameroundService.insert(mapper.readValue(it, type))
             }.subscribe()
+    }
+
+    fun copyToHistory(tournament: String, path: Path = Path.of(historyPath)) {
+        Files.createDirectories(Path.of("$path/$tournament"))
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss.SSSSSS")
+        val dateTime: LocalDateTime = LocalDateTime.now()
+        val now = dateTime.format(formatter).replace('_','T')
+        Files.walk(Path.of("$defaultPath/$tournament"))
+            .forEach {
+                try {
+                    if(it.isDirectory()) {
+                        Files.copy(it,Path.of("$path/$tournament/$now"))
+                    } else {
+                        Files.copy(it,Path.of("$path/$tournament/$now/${it.fileName}"))
+                    }
+                }catch(_: Exception) {}
+            }
     }
 }

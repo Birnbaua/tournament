@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Field
 @Document(collection = "field")
 @CompoundIndexes(value = [CompoundIndex(name = "field_index", def = "{'tournament': 1, 'no': 1}", unique = true)])
 @Suppress("unused")
-class Field {
+class Field() {
 
     enum class FieldType{ SAND,GRASS,HARD,UNKNOWN }
 

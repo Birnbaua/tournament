@@ -30,4 +30,11 @@ class RecoveryApplicationTest {
         recoveryService.saveAllToFile(tournament.id!!)
         tournamentService.existsById("TEST").subscribe{ assert(it) }
     }
+
+    @Test
+    fun testCurrentToDB() {
+        tournamentService.existsById("TEST").subscribe{ assert(it == false) }
+        recoveryService.replaceTournamentInDatabase("TEST")
+        tournamentService.existsById("TEST").subscribe{ assert(it) }
+    }
 }

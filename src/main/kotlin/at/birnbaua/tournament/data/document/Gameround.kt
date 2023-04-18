@@ -18,7 +18,7 @@ import org.springframework.data.mongodb.core.mapping.Field
 
 @Document(value = "gameround")
 @CompoundIndexes(value = [CompoundIndex(name = "gameround_index", def = "{'tournament': 1, 'no': 1}", unique = true)])
-class Gameround {
+class Gameround() {
 
     @Id
     @Field(name = "_id")

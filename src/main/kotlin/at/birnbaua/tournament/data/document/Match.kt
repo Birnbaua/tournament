@@ -13,7 +13,7 @@ import java.time.LocalDateTime
 
 @Document(value = "match")
 @CompoundIndexes(value = [CompoundIndex(name = "match_index", def = "{'tournament': 1, 'no': 1}", unique = true)])
-class Match {
+class Match() {
 
     @Id
     @Field(name = "_id")

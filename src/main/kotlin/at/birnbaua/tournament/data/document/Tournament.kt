@@ -3,10 +3,11 @@ package at.birnbaua.tournament.data.document
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.core.mapping.Field
+import java.io.Serializable
 import java.time.LocalDateTime
 
 @Document(value = "tournament")
-class Tournament {
+class Tournament() : Serializable {
 
     @Id
     @Field(name = "_id")

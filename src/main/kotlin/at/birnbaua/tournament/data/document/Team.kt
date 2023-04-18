@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Field
 @Document(value = "team")
 @CompoundIndexes(value = [CompoundIndex(name = "team_index", def = "{'tournament': 1, 'no': 1}", unique = true)])
 @Suppress("unused")
-class Team {
+class Team() {
 
     @Id
     @Field(name = "_id")
