@@ -8,7 +8,8 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 @RestController
-@RequestMapping("/\${api.tournament:#{apiProperties.tournament}}/{tournament}/\${api.team:#{apiProperties.team}}")
+@RequestMapping("/#{apiProperties.tournament}/{tournament}/#{apiProperties.team}")
+@SuppressWarnings("all")
 class TeamController {
 
     @Autowired
@@ -31,6 +32,11 @@ class TeamController {
         entity.tournament = tournament
         entity.no = no
         return service.upsert(entity)
+    }
+
+    @PatchMapping("/{no}/rename")
+    fun rename(@PathVariable tournament: String, @PathVariable no: Int, @RequestParam name: String) : Mono<Team> {
+        return service.rename(tournament,no,name)
     }
 
     @PatchMapping("/{no}")

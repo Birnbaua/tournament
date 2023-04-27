@@ -34,8 +34,8 @@ class TournamentTemplate {
     @Field(name = "tournament_start")
     var tournamentStart: LocalDateTime = LocalDateTime.now().plusDays(1)
 
-    @Field(name = "gameround_config")
-    var gameroundConfig: MutableMap<Int,String> = mutableMapOf()
+    @Field(name = "gameround_templates")
+    var gameroundTemplates: MutableMap<Int,GameroundTemplate> = mutableMapOf()
 
     fun toTournament() : Tournament {
         val tournament = Tournament()
@@ -44,7 +44,7 @@ class TournamentTemplate {
         tournament.desc = this.tournamentDesc
         tournament.title = this.tournamentTitle
         tournament.start = this.tournamentStart
-        tournament.gameroundTemplates = this.gameroundConfig
+        tournament.gameroundTemplates = this.gameroundTemplates
         return tournament
     }
 

@@ -2,22 +2,60 @@ package at.birnbaua.tournament.data.service.gen
 
 import at.birnbaua.tournament.data.document.Gameround
 import at.birnbaua.tournament.data.document.Team
+import at.birnbaua.tournament.data.document.Tournament
 import at.birnbaua.tournament.data.document.sub.EmbeddedGroup
 import at.birnbaua.tournament.data.document.sub.EmbeddedTeam
 import at.birnbaua.tournament.data.document.template.GameroundTemplate
+import at.birnbaua.tournament.data.service.TeamService
+import at.birnbaua.tournament.data.service.GameroundService
+import at.birnbaua.tournament.exception.ResourceNotFoundException
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import reactor.core.publisher.Mono
 
 @Service
 class GameroundGeneratingService {
 
     private val log = LoggerFactory.getLogger(GameroundGeneratingService::class.java)
+    @Autowired private lateinit var ts: TeamService
+    @Autowired private lateinit var grs: GameroundService
 
     fun generate(template: GameroundTemplate, teams: List<Team>, gameroundNumber: Int? = null) : Gameround {
         val gr = genDataFromTemplate(template, gameroundNumber)
         log.debug("Generate Gameround instance with ${teams.size} teams.")
         gr.groups.addAll(toGroups(template, teams))
         return gr
+    }
+
+    fun generateGameround(tournament: Tournament, no: Int, generateFeizi: Boolean = true) : Mono<Gameround> {
+        return try {
+            val template = tournament.gameroundTemplates[no]!!
+            if(generateFeizi) {
+                generateFeiziGameround(tournament.id!!, no, template)
+            } else {
+                generateFeiziGameround(tournament.id!!, no, template)
+            }
+        } catch(e: Exception) {
+            log.error("No template for tournament: $tournament and gameround: $no found")
+            throw ResourceNotFoundException("No template for tournament: $tournament and gameround: $no found")
+        }
+    }
+
+    private fun generateFeiziGameround(tournament: String, no: Int, template: GameroundTemplate) : Mono<Gameround> {
+        log.debug("Generate Feizi gameround with tournament: $tournament, gameround: $no and template: ${template.id}")
+        return when(no) {
+            0 -> ts.findAllByTournament(tournament)
+                .collectList()
+                .map { generateFeiziRound1(template,it,no) }
+            1 -> grs.findPreviousByTournamentAndNo(tournament, no).map { generateFeiziRound2(template,it) }
+            2 -> grs.findPreviousByTournamentAndNo(tournament, no).map { generateFeiziRound3(template,it) }
+            3 -> grs.findPreviousByTournamentAndNo(tournament, no).map { generateFeiziRound4(template,it) }
+            else -> {
+                log.error("Gameround number for Feizi generation out of bound. Must be 0 <= number < 4 but was: $no")
+                throw IllegalArgumentException("Gameround number must be within [0..3]")
+            }
+        }
     }
 
     fun generateFeiziRound1(template: GameroundTemplate, teams: List<Team>, gameroundNumber: Int? = null) : Gameround {

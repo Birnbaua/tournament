@@ -1,15 +1,18 @@
 package at.birnbaua.tournament.properties
 
 import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.PropertySource
 import org.springframework.stereotype.Component
 
-@Component
+@Configuration
+@PropertySource("classpath:application.properties")
 @ConfigurationProperties(prefix = "api")
 @Suppress("unused")
 class ApiProperties {
-    var tournament: String = "/tournament"
-    var gameround: String = "/gameround"
-    var field: String = "/field"
-    var team: String = "/team"
-    var match: String = "/match"
+    var tournament: String = "tournaments"
+    var gameround: String = "gamerounds"
+    var field: String = "fields"
+    var team: String = "teams"
+    var match: String = "matchs"
 }

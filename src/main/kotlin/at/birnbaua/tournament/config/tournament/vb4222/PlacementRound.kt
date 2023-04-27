@@ -4,8 +4,7 @@ import at.birnbaua.tournament.data.document.sub.gameround.MatchMakingConfig
 import at.birnbaua.tournament.data.document.sub.gameround.MatchTemplate
 import at.birnbaua.tournament.data.document.template.GameroundTemplate
 
-@Suppress("unused")
-class CrossGameRound() {
+class PlacementRound() {
     var noOfSets = 3
     var setTime = 12
     var setBreakTime = 0

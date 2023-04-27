@@ -8,7 +8,7 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 @RestController
-@RequestMapping("/\${api.tournament:#{apiProperties.tournament}}/{tournament}/\${api.field:#{apiProperties.field}}")
+@RequestMapping("/#{apiProperties.tournament}/{tournament}/#{apiProperties.field}")
 class FieldController {
     @Autowired
     private lateinit var service: FieldService

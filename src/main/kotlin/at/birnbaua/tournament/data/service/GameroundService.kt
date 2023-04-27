@@ -40,6 +40,7 @@ class GameroundService {
     fun insert(entities: Iterable<Gameround>) : Flux<Gameround> { return repo.insert(entities) }
     fun findById(id: ObjectId) : Mono<Gameround> { return repo.findById(id) }
     fun findByTournamentAndNo(tournament: String, no: Int) : Mono<Gameround> { return repo.findByTournamentAndNo(tournament, no) }
+    fun findPreviousByTournamentAndNo(tournament: String, no: Int) : Mono<Gameround> { return repo.findByTournamentAndNo(tournament, no-1)}
     fun findAllByTournament(tournament: String) : Flux<Gameround> { return repo.findAllByTournament(tournament) }
     fun deleteByTournamentAndNo(tournament: String, no: Int) : Mono<Void> { return repo.deleteByTournamentAndNo(tournament, no) }
     fun deleteAllByTournament(tournament: String) : Mono<Void> { return repo.deleteAllByTournament(tournament) }
@@ -54,32 +55,6 @@ class GameroundService {
     }
 
     fun generateGameround(tournament: String, no: Int) : Mono<Gameround> {
-        return trs.findById(tournament)
-            .flatMap {
-                if(it.gameroundTemplates.containsKey(no)) gts.findById(it.gameroundTemplates[no]!!)
-                else gts.findByTournamentAndGameround(tournament,no)
-            }
-            .switchIfEmpty {
-                log.error("No template for tournament: $tournament and gameround: $no found")
-                throw ResourceNotFoundException("No template for tournament: $tournament and gameround: $no found")
-            }
-            .doOnNext { log.debug("Loaded template: ${it.id} for tournament: $tournament and gameround: $no") }
-            .flatMap { if(genFeiziOnly) generateFeiziGameround(tournament,no,it) else generateFeiziGameround(tournament,no,it) }
-    }
-
-    private fun generateFeiziGameround(tournament: String, no: Int, template: GameroundTemplate) : Mono<Gameround> {
-        log.debug("Generate Feizi gameround with tournament: $tournament, gameround: $no and template: ${template.id}")
-        return when(no) {
-            0 -> ts.findAllByTournament(tournament)
-                .collectList()
-                .map { ggs.generateFeiziRound1(template,it,no) }
-            1 -> findByTournamentAndNo(tournament, no).map { ggs.generateFeiziRound2(template,it) }
-            2 -> findByTournamentAndNo(tournament, no).map { ggs.generateFeiziRound3(template,it) }
-            3 -> findByTournamentAndNo(tournament, no).map { ggs.generateFeiziRound4(template,it) }
-            else -> {
-                log.error("Gameround number for Feizi generation out of bound. Must be 0 <= number <= 4 but was: $no")
-                throw IllegalArgumentException("Gameround number must be within [0..3]")
-            }
-        }
+        TODO()
     }
 }

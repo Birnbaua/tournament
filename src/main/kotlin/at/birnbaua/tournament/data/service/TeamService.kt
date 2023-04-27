@@ -3,6 +3,7 @@ package at.birnbaua.tournament.data.service
 import at.birnbaua.tournament.data.document.Match
 import at.birnbaua.tournament.data.document.Team
 import at.birnbaua.tournament.data.repository.TeamRepository
+import at.birnbaua.tournament.exception.ResourceNotFoundException
 import org.bson.types.ObjectId
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -49,5 +50,24 @@ class TeamService {
     @Transactional(isolation = Isolation.READ_COMMITTED)
     fun patch(entity: Team) : Mono<Team> {
         return TODO("Do when other is finished")
+    }
+
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    fun rename(tournament: String, no: Int, name: String): Mono<Team> {
+        return repo.findByTournamentAndNo(tournament, no)
+            .doOnError {
+                val msg = "Team of tournament: $tournament and no: $no does not exist."
+                log.error(msg)
+                throw ResourceNotFoundException(msg)
+            }
+            .flatMap {
+                it.name = name
+                Mono.zip(
+                    repo.save(it),
+                    ms.updateTeamNameByTournamentAndNo(tournament,no,name))
+                //,grs.updateTeamNameByTournamentAndNo(tournament,no,name)
+
+            }
+            .map { it.t1 }
     }
 }

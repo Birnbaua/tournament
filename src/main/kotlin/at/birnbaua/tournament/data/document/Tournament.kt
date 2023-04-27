@@ -1,5 +1,6 @@
 package at.birnbaua.tournament.data.document
 
+import at.birnbaua.tournament.data.document.template.GameroundTemplate
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.core.mapping.Field
@@ -26,7 +27,7 @@ class Tournament() : Serializable {
     var start: LocalDateTime? = null
 
     @Field(name = "gameround_templates")
-    var gameroundTemplates: MutableMap<Int,String> = mutableMapOf()
+    var gameroundTemplates: MutableMap<Int,GameroundTemplate> = mutableMapOf()
 
     @Field(name = "audit")
     var audit: AuditEntry = AuditEntry()

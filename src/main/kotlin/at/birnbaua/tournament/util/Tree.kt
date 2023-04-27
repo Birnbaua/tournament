@@ -15,6 +15,7 @@ class Tree<K,V> {
     var entries: MutableMap<K?,TreeEntry<K,V>> = mutableMapOf()
 
     fun addOrReplace(key: K?, children: Set<K>, values: List<V>) {
+        if ((key != null) && (key.toString().lowercase() == "null")) throw java.lang.IllegalArgumentException("Key must not have name \"null\"!")
         if(this.entries.isEmpty() && key != null) throw IllegalArgumentException("Tree must contain root node with key == null!")
         this.entries[key] = TreeEntry(children,values)
     }

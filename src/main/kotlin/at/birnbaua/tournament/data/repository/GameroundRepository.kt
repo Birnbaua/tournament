@@ -11,6 +11,7 @@ import reactor.core.publisher.Mono
 @Repository
 interface GameroundRepository : ReactiveMongoRepository<Gameround,ObjectId> {
     fun findAllByTournament(tournament: String) : Flux<Gameround>
+    fun findFirstByTournamentOrderByNoDesc(tournament: String) : Mono<Gameround>
     fun findByTournamentAndNo(tournament: String, no: Int) : Mono<Gameround>
     fun deleteByTournamentAndNo(tournament: String, no: Int) : Mono<Void>
     fun deleteAllByTournament(tournament: String) : Mono<Void>
