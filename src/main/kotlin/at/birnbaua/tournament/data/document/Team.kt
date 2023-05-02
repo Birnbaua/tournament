@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Field
 @Document(value = "team")
 @CompoundIndexes(value = [CompoundIndex(name = "team_index", def = "{'tournament': 1, 'no': 1}", unique = true)])
 @Suppress("unused")
-class Team() {
+class Team {
 
     @Id
     @Field(name = "_id")
@@ -39,5 +39,13 @@ class Team() {
 
     override fun toString(): String {
         return "No: $no, name: $name"
+    }
+
+    override fun equals(other: Any?): Boolean {
+        return if(other is Team) other.no == this.no else false
+    }
+
+    override fun hashCode(): Int {
+        return no
     }
 }

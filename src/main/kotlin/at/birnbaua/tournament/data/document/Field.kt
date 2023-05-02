@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Field
 @Document(collection = "field")
 @CompoundIndexes(value = [CompoundIndex(name = "field_index", def = "{'tournament': 1, 'no': 1}", unique = true)])
 @Suppress("unused")
-class Field() {
+class Field {
 
     enum class FieldType{ SAND,GRASS,HARD,UNKNOWN }
 
@@ -40,4 +40,10 @@ class Field() {
     fun toEmbedded() : EmbeddedField {
         return EmbeddedField(this.no, this.name)
     }
+
+    override fun equals(other: Any?): Boolean {
+        return if(other is at.birnbaua.tournament.data.document.Field) other.no == this.no else false
+    }
+
+    override fun hashCode(): Int { return no }
 }

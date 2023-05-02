@@ -32,4 +32,11 @@ class TournamentService {
             .doOnNext { it.id = tournamentId }
             .flatMap { repo.insert(it) }
     }
+
+    fun generateAndInsertFeiziByTeamNo(tournamentId: String, teams: Int): Mono<Tournament> {
+        return tts.findFirstByTeams(teams)
+            .map { it.toTournament() }
+            .doOnNext { it.id = tournamentId }
+            .flatMap { repo.insert(it) }
+    }
 }

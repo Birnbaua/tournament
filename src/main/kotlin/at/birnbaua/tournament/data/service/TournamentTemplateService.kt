@@ -18,4 +18,8 @@ class TournamentTemplateService {
     fun deleteAll(): Mono<Void> { return repo.deleteAll() }
     fun existsById(id: String) : Mono<Boolean> { return repo.existsById(id) }
 
+    fun findFirstByTeams(teams: Int) : Mono<TournamentTemplate> {
+        return repo.findFirstByProperties_MinNoOfTeamsGreaterThanEqualAndProperties_MaxNoOfTeamsLessThanEqual(teams,teams)
+    }
+
 }
