@@ -2,6 +2,7 @@ package at.birnbaua.tournament.config.tournament.vb4222
 
 import at.birnbaua.tournament.data.document.template.GameroundTemplate
 import at.birnbaua.tournament.data.document.template.TournamentTemplate
+import at.birnbaua.tournament.data.document.template.TournamentTemplateProperties
 import java.time.LocalDateTime
 
 class TournamentConfig2023 {
@@ -16,6 +17,7 @@ class TournamentConfig2023 {
         template.tournamentDesc = "Turnier der Sektion Volleyball des TSV St. Georgen an der Gusen mit $numberOfGroups Gruppen á 5 Teams"
         template.tournamentTitle = "Default VB4222"
         template.tournamentStart = LocalDateTime.of(2023,6,17,9,30)
+        template.properties = TournamentTemplateProperties(numberOfGroups*5-4,numberOfGroups*5,numberOfGroups)
         template.gameroundTemplates = genGameroundConfig(numberOfGroups)
         return template
     }

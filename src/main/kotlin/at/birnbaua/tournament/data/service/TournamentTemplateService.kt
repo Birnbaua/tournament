@@ -15,5 +15,7 @@ class TournamentTemplateService {
     fun insertIfNotExisting(template: TournamentTemplate) : Mono<TournamentTemplate> { return repo.insert(template).onErrorComplete() }
     fun save(template: TournamentTemplate) : Mono<TournamentTemplate> { return repo.save(template) }
     fun findById(id: String) : Mono<TournamentTemplate> { return repo.findById(id) }
+    fun deleteAll(): Mono<Void> { return repo.deleteAll() }
+    fun existsById(id: String) : Mono<Boolean> { return repo.existsById(id) }
 
 }

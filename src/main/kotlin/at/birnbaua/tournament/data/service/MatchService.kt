@@ -28,17 +28,18 @@ class MatchService {
     fun findAllByGameround(tournament: String, gameround: Int) : Flux<Match> { return repo.findAllByTournamentAndGameround(tournament,gameround) }
     fun deleteByTournamentAndNo(tournament: String, no: Int) : Mono<Long> { return repo.deleteByTournamentAndNo(tournament, no) }
     fun deleteAllByTournament(tournament: String) : Mono<Long> { return repo.deleteAllByTournament(tournament) }
+    fun deleteAll(): Mono<Void> { return repo.deleteAll() }
     fun deleteAllByTournamentAndNoIn(tournament: String, no: List<Int> ) : Mono<Long> { return repo.deleteAllByTournamentAndNoIn(tournament, no) }
 
     @Transactional(isolation = Isolation.READ_COMMITTED)
     fun updateTeamNameByTournamentAndNo(tournament: String?, no: Int?, new: String?) : Mono<Long> {
-        log.trace("Update team name request for tournament: $tournament with no: $no and new name: $new ")
+        log.trace("Update team name in matches of tournament: $tournament with no: $no and new name: $new ")
         return repo.updateTeamNameByTournamentAndNo(tournament, no, new)
     }
 
     @Transactional(isolation = Isolation.READ_COMMITTED)
     fun updateFieldNameByTournamentAndNo(tournament: String?, no: Int?, new: String?) : Mono<Long> {
-        log.trace("Update field name request for tournament: $tournament with no: $no and new name: $new ")
+        log.trace("Update field name in matches of tournament: $tournament with no: $no and new name: $new")
         return repo.updateFieldNameByTournamentAndNo(tournament, no, new)
     }
 

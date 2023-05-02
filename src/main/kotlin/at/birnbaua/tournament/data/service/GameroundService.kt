@@ -14,9 +14,14 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Isolation
+import org.springframework.transaction.annotation.Transactional
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.switchIfEmpty
+import reactor.kotlin.extra.math.sum
+import reactor.kotlin.extra.math.sumAll
+import reactor.kotlin.extra.math.sumAsLong
 import java.time.LocalDateTime
 import kotlin.IllegalArgumentException
 
@@ -25,11 +30,7 @@ class GameroundService {
 
     @Autowired private lateinit var repo: GameroundRepository
 
-    @Autowired private lateinit var ggs: GameroundGeneratingService
-    @Autowired private lateinit var gts: GameroundTemplateService
     @Autowired private lateinit var mgs: SimpleMatchGeneratingService
-    @Autowired private lateinit var trs: TournamentService
-    @Autowired private lateinit var ts: TeamService
     @Autowired private lateinit var fs: FieldService
     @Autowired private lateinit var ms: MatchService
     private val log: Logger = LoggerFactory.getLogger(GameroundService::class.java)
@@ -44,7 +45,29 @@ class GameroundService {
     fun findAllByTournament(tournament: String) : Flux<Gameround> { return repo.findAllByTournament(tournament) }
     fun deleteByTournamentAndNo(tournament: String, no: Int) : Mono<Void> { return repo.deleteByTournamentAndNo(tournament, no) }
     fun deleteAllByTournament(tournament: String) : Mono<Void> { return repo.deleteAllByTournament(tournament) }
+    fun deleteAll() : Mono<Void> { return repo.deleteAll() }
     fun existsById(id: ObjectId) : Mono<Boolean> { return repo.existsById(id) }
+
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    fun updateTeamNameByTournamentAndNo(tournament: String, no: Int, newName: String) : Mono<Long> {
+        log.trace("Update team name in groups of tournament: $tournament with no: $no and new name: $newName ")
+        return findAllByTournament(tournament)
+            .map {
+                var count = 0L
+                it.groups
+                    .flatMap { group -> group.teams }
+                    .forEach { team ->
+                        if (team.no == no) {
+                            team.name = newName
+                            count += 1
+                        }
+                    }
+                Pair(it,count)
+            }
+            .flatMap { save(it.first).zipWith(Mono.just(it.second)) }
+            .collectList()
+            .map { it.sumOf { gr -> gr.t2 } }
+    }
 
     fun generateMatchesOf(tournament: String, no: Int, startTime: LocalDateTime) : Flux<Match> {
         val fields = fs.findAllByTournament(tournament).collectList()

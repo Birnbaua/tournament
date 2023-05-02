@@ -34,6 +34,9 @@ class TournamentTemplate {
     @Field(name = "tournament_start")
     var tournamentStart: LocalDateTime = LocalDateTime.now().plusDays(1)
 
+    @Field(name = "properties")
+    var properties: TournamentTemplateProperties = TournamentTemplateProperties()
+
     @Field(name = "gameround_templates")
     var gameroundTemplates: MutableMap<Int,GameroundTemplate> = mutableMapOf()
 

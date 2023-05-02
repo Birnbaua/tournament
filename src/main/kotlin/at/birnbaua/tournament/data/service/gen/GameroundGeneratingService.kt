@@ -32,9 +32,9 @@ class GameroundGeneratingService {
         return try {
             val template = tournament.gameroundTemplates[no]!!
             if(generateFeizi) {
-                generateFeiziGameround(tournament.id!!, no, template)
+                generateFeiziGameround(tournament.id!!, no, template).doOnNext { it.tournament = tournament.id }
             } else {
-                generateFeiziGameround(tournament.id!!, no, template)
+                generateFeiziGameround(tournament.id!!, no, template).doOnNext { it.tournament = tournament.id }
             }
         } catch(e: Exception) {
             log.error("No template for tournament: $tournament and gameround: $no found")
@@ -59,6 +59,7 @@ class GameroundGeneratingService {
     }
 
     fun generateFeiziRound1(template: GameroundTemplate, teams: List<Team>, gameroundNumber: Int? = null) : Gameround {
+        log.info("Generate first gameround of type \"Feizi\"")
         return generate(template, teams, gameroundNumber)
     }
 
@@ -159,7 +160,6 @@ class GameroundGeneratingService {
         log.debug("Flattened: ${groups.map { it.teams.size }}")
     }
 
-
     private fun flatten(groups: List<EmbeddedGroup>, targetGroupSize: Int) {
         while(groups.size > 1 && groups.last().teams.size < targetGroupSize) {
             val team = groups[groups.size - 2].teams.removeLast()
@@ -175,6 +175,7 @@ class GameroundGeneratingService {
 
     private fun genDataFromTemplate(template: GameroundTemplate, gameroundNumber: Int? = null) : Gameround {
         val gr = Gameround()
+        log.debug("Template to gameround: ${template.gameroundName} of gameround number: $gameroundNumber")
         if(gameroundNumber != null) gr.no = gameroundNumber else gr.no = template.gameroundNumber
         gr.name = template.gameroundName
         gr.desc = template.gameroundDesc

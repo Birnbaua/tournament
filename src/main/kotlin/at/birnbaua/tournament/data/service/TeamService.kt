@@ -1,5 +1,6 @@
 package at.birnbaua.tournament.data.service
 
+import at.birnbaua.tournament.data.document.Field
 import at.birnbaua.tournament.data.document.Match
 import at.birnbaua.tournament.data.document.Team
 import at.birnbaua.tournament.data.repository.TeamRepository
@@ -20,16 +21,18 @@ class TeamService {
     @Autowired
     private lateinit var repo: TeamRepository
 
-    @Autowired
-    private lateinit var ms: MatchService
+    @Autowired private lateinit var ms: MatchService
+    @Autowired private lateinit var grs: GameroundService
 
     private val log = LoggerFactory.getLogger(TeamService::class.java)
 
     fun insert(entity: Team) : Mono<Team> { return repo.insert(entity) }
+    fun insert(iterable: Iterable<Team>) : Flux<Team> { return repo.insert(iterable) }
     fun findById(id: ObjectId) : Mono<Team> { return repo.findById(id) }
     fun findByTournamentAndNo(tournament: String, no: Int) : Mono<Team> { return repo.findByTournamentAndNo(tournament, no)}
     fun findAllByTournament(tournament: String) : Flux<Team> { return repo.findAllByTournament(tournament) }
     fun deleteByTournamentAndNo(tournament: String, no: Int) : Mono<Long> { return repo.deleteByTournamentAndNo(tournament, no) }
+    fun deleteAll(): Mono<Void> { return repo.deleteAll() }
     fun deleteAllByTournament(tournament: String) : Mono<Long> { return repo.deleteAllByTournament(tournament) }
     fun deleteAllByTournamentAndNoIn(tournament: String, no: List<Int> ) : Mono<Long> { return repo.deleteAllByTournamentAndNoIn(tournament, no) }
 
@@ -64,9 +67,9 @@ class TeamService {
                 it.name = name
                 Mono.zip(
                     repo.save(it),
-                    ms.updateTeamNameByTournamentAndNo(tournament,no,name))
-                //,grs.updateTeamNameByTournamentAndNo(tournament,no,name)
-
+                    ms.updateTeamNameByTournamentAndNo(tournament,no,name),
+                    grs.updateTeamNameByTournamentAndNo(tournament,no,name)
+                )
             }
             .map { it.t1 }
     }

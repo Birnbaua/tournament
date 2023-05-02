@@ -17,4 +17,5 @@ class GameroundTemplateService {
     fun findAll() : Flux<GameroundTemplate> { return repo.findAll() }
     fun findById(id: String) : Mono<GameroundTemplate> { return repo.findById(id) }
     fun findByTournamentAndGameround(tournament: String, no: Int) : Mono<GameroundTemplate> { return repo.findByTournamentAndGameroundNumber(tournament, no) }
+    fun deleteAll(): Mono<Void> { return repo.deleteAll() }
 }

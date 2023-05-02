@@ -36,4 +36,8 @@ class Team() {
 
     @Field(name = "audit")
     var audit: AuditEntry = AuditEntry()
+
+    override fun toString(): String {
+        return "No: $no, name: $name"
+    }
 }

@@ -5,5 +5,4 @@ import org.springframework.data.mongodb.repository.ReactiveMongoRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface TournamentRepository : ReactiveMongoRepository<Tournament,String> {
-}
+interface TournamentRepository : ReactiveMongoRepository<Tournament,String>

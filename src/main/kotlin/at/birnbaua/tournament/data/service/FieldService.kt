@@ -25,11 +25,13 @@ class FieldService {
     private val log = LoggerFactory.getLogger(TeamService::class.java)
 
     fun insert(entity: Field) : Mono<Field> { return repo.insert(entity) }
+    fun insert(iterable: Iterable<Field>) : Flux<Field> { return repo.insert(iterable) }
     fun findById(id: ObjectId) : Mono<Field> { return repo.findById(id) }
     fun findByTournamentAndNo(tournament: String, no: Int) : Mono<Field> { return repo.findByTournamentAndNo(tournament, no)}
     fun findAllByTournament(tournament: String) : Flux<Field> { return repo.findAllByTournament(tournament) }
     fun deleteByTournamentAndNo(tournament: String, no: Int) : Mono<Long> { return repo.deleteByTournamentAndNo(tournament, no) }
     fun deleteAllByTournament(tournament: String) : Mono<Long> { return repo.deleteAllByTournament(tournament) }
+    fun deleteAll(): Mono<Void> { return repo.deleteAll() }
 
     fun upsert(entity: Field) : Mono<Field> {
         return if(entity.id != null) { findById(entity.id!!) } else { findByTournamentAndNo(entity.tournament!!,entity.no!!) }
