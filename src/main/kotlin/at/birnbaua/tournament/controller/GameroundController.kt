@@ -4,6 +4,8 @@ import at.birnbaua.tournament.data.document.Gameround
 import at.birnbaua.tournament.data.document.Match
 import at.birnbaua.tournament.data.service.GameroundService
 import at.birnbaua.tournament.data.service.MatchService
+import at.birnbaua.tournament.data.service.TournamentService
+import at.birnbaua.tournament.data.service.gen.GameroundGeneratingService
 import at.birnbaua.tournament.pdf.PdfService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
@@ -24,7 +26,9 @@ import java.time.LocalDateTime
 @RequestMapping("/\${api.tournament:#{apiProperties.tournament}}/{tournament}/\${api.gameround:#{apiProperties.gameround}}")
 class GameroundController {
 
+    @Autowired private lateinit var ts: TournamentService
     @Autowired private lateinit var gs: GameroundService
+    @Autowired private lateinit var ggs: GameroundGeneratingService
     @Autowired private lateinit var ms: MatchService
     @Autowired private lateinit var pdfService: PdfService
 
@@ -44,7 +48,11 @@ class GameroundController {
     fun delete(@PathVariable tournament: String, @PathVariable no: Int) : Mono<Void> { return gs.deleteByTournamentAndNo(tournament,no) }
 
     @GetMapping(path = ["/{no}/generate"])
-    fun generateGameround(@PathVariable tournament: String, @PathVariable no: Int) : Mono<Gameround> { return gs.generateGameround(tournament,no) }
+    fun generateGameround(@PathVariable tournament: String, @PathVariable no: Int) : Mono<Gameround> {
+        return ts.findById(tournament)
+            .flatMap { ggs.generateGameround(it,no) }
+            .flatMap { gs.save(it) }
+    }
 
     @GetMapping(path = ["/{no}/generate/matches"])
     fun generateMatchesOfGameround(@PathVariable tournament: String, @PathVariable no: Int) : Flux<Match> { return gs.generateMatchesOf(tournament,no,LocalDateTime.now()) }

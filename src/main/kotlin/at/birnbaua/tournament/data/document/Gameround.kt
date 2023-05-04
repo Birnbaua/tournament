@@ -1,8 +1,6 @@
 package at.birnbaua.tournament.data.document
 
 import at.birnbaua.tournament.data.document.sub.EmbeddedGroup
-import at.birnbaua.tournament.data.document.sub.EmbeddedResult
-import at.birnbaua.tournament.data.document.sub.gameround.GameroundConfig
 import at.birnbaua.tournament.data.document.sub.gameround.MatchMakingConfig
 import at.birnbaua.tournament.data.service.feizi.GroupMakingConfig
 import at.birnbaua.tournament.data.service.feizi.SimpleOrderConfig
@@ -50,7 +48,7 @@ class Gameround() {
     var results: MutableList<SimpleResult> = mutableListOf()
 
     @Field(name = "match_making_config")
-    var matchMakingConfigs: MutableMap<String?,MatchMakingConfig> = mutableMapOf()
+    var matchMakingConfig: MutableMap<String?,MatchMakingConfig> = mutableMapOf()
 
     @Field(name = "group_making_config")
     var groupMakingConfig: MutableMap<String?, GroupMakingConfig> = mutableMapOf()

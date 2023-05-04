@@ -56,7 +56,7 @@ class GameroundGenerationTest {
     @Test
     fun saveGameround() {
         val triple = tts.findById("vb_standard_12")
-            .map { tgs.generate(it) }.block()!!
+            .map { tgs.generate("vb_standard_$it",it) }.block()!!
         tournamentService.insert(triple.first).block()
         ts.insert(triple.second).collectList().block()
         fs.insert(triple.third).collectList().block()

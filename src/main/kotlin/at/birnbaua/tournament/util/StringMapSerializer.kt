@@ -13,8 +13,8 @@ class StringMapSerializer(t: Class<LinkedHashMap<*,*>>? = LinkedHashMap::class.j
 
     @Suppress("UNCHECKED_CAST")
     override fun serialize(p0: LinkedHashMap<*,*>?, p1: JsonGenerator?, p2: SerializerProvider?) {
-        log.trace("TEST SERIALIZER")
-        if (p0 != null ) {
+        log.debug("TEST SERIALIZER")
+        if (p0 != null) {
             if (p0.containsKey(null)) {
                 p0 as LinkedHashMap<String?, Any?>
                 val root = p0[null]

@@ -9,7 +9,7 @@ import org.springframework.data.convert.WritingConverter
 
 
 @WritingConverter
-class MapToConverter : Converter<LinkedHashMap<in String?, *>, Any> {
+class MapToConverter : Converter<LinkedHashMap<in String?, Any?>, Any> {
 
     private val log = LoggerFactory.getLogger(MapToConverter::class.java)
     private val mapper = ObjectMapper()
@@ -19,9 +19,18 @@ class MapToConverter : Converter<LinkedHashMap<in String?, *>, Any> {
         module.addSerializer(StringMapSerializer())
         mapper.registerModule(module)
     }
-    override fun convert(source: LinkedHashMap<in String?, *>): Any {
-        val typeRef: TypeReference<LinkedHashMap<String?, *>> = object : TypeReference<LinkedHashMap<String?, *>>() {}
+    override fun convert(source: LinkedHashMap<in String?, Any?>): Any {
+        val typeRef: TypeReference<LinkedHashMap<String?, Any?>> = object : TypeReference<LinkedHashMap<String?, Any?>>() {}
+        log.trace("Convert map with nullable String keys from database")
         val value = mapper.writeValueAsString(source).replace("\\\"","\"")
+        /*
+        if(source.containsKey(null).not()) {
+            val newEntries = source.map { Pair(it.key.toString(),it.value) }
+            source.clear()
+            newEntries.forEach { source[it.first] = it.second}
+            return source
+        }
+         */
         return mapper.readValue(value,typeRef)
     }
 }

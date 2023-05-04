@@ -27,6 +27,10 @@ class TournamentConfig2023 {
         val secondRound = GroupInternalRound().genGameroundTemplate("Zwischenrunde","VB4222 Vorrunde 2023", numberOfGroups)
         val thirdRound = CrossPlaysRound().genGameroundTemplate("Kreuzspiele","VB4222 Kreuzspiele 2023", numberOfGroups)
         val fourthRound = PlacementRound().genGameroundTemplate("Platzierungsspiele", "VB4222 Platzierungsspiele 2023", numberOfGroups)
+        firstRound.flattenGroupsOnImproperTeamNumber = true
+        secondRound.flattenGroupsOnImproperTeamNumber = true
+        thirdRound.flattenGroupsOnImproperTeamNumber = false
+        fourthRound.flattenGroupsOnImproperTeamNumber = false
         firstRound.gameroundNumber = 0
         secondRound.gameroundNumber = 1
         thirdRound.gameroundNumber = 2

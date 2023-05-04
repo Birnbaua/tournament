@@ -130,6 +130,7 @@ class GameroundGeneratingService {
         val groups: MutableList<EmbeddedGroup> = mutableListOf()
         var group = EmbeddedGroup()
         log.debug("Transform ${teams.size} teams to groups...")
+        log.debug("{No: ${template.gameroundNumber}, Flatten: ${template.flattenGroupsOnImproperTeamNumber}, GroupSize: ${template.defaultGroupSize}, Teams: ${teams.size}}")
         for ((index,team) in teams.withIndex()) {
             if(index%template.defaultGroupSize == 0) {
                 group = EmbeddedGroup(index / template.defaultGroupSize)
@@ -148,7 +149,7 @@ class GameroundGeneratingService {
         if(template.flattenGroupsOnImproperTeamNumber && teams.size%template.defaultGroupSize != 0) {
             log.debug("Default group size: ${template.defaultGroupSize} and teams size: ${teams.size}")
             flattenGroups(groups,template.defaultGroupSize)
-            groups.forEach { group -> log.trace("Group ${group.no} with ${group.teams.size} teams. ${group.teams}") }
+            groups.forEach { groupI -> log.trace("Group ${groupI.no} with ${groupI.teams.size} teams. ${groupI.teams}") }
         }
         return groups
     }
@@ -180,7 +181,7 @@ class GameroundGeneratingService {
         gr.name = template.gameroundName
         gr.desc = template.gameroundDesc
         gr.groupBinding = template.groupBinding
-        gr.matchMakingConfigs = template.matchMakingConfig
+        gr.matchMakingConfig = template.matchMakingConfig
         gr.orderConfig = template.orderConfig
         gr.matchNoOffset = template.matchNumberOffset
         return gr

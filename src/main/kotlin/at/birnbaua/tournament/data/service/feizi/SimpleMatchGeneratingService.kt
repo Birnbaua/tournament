@@ -21,7 +21,7 @@ class SimpleMatchGeneratingService {
         val matches = mutableListOf<Match>()
         val binding = gameround.groupBinding
         val groups = gameround.groups.associateBy { it.no }
-        val configs = gameround.matchMakingConfigs
+        val configs = gameround.matchMakingConfig
         val fields = allFields.sortedBy { it.no }
         var matchNo = gameround.matchNoOffset
         log.debug("Starting match generation with: ${fields.size} fields and ${gameround.groups.size} groups")

@@ -10,6 +10,8 @@ import at.birnbaua.tournament.data.service.TeamService
 import at.birnbaua.tournament.data.service.TournamentService
 import at.birnbaua.tournament.data.service.TournamentTemplateService
 import at.birnbaua.tournament.exception.ResourceNotFoundException
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
@@ -21,39 +23,44 @@ import java.time.LocalDateTime
 @Service
 class TournamentGeneratingService {
 
+    private val log: Logger = LoggerFactory.getLogger(TournamentGeneratingService::class.java)
+
     @Autowired private lateinit var tournamentService: TournamentService
     @Autowired private lateinit var tts: TournamentTemplateService
     @Autowired private lateinit var fs: FieldService
     @Autowired private lateinit var ts: TeamService
 
-    fun generate(template: TournamentTemplate, noOfTeams: Int = template.properties.maxNoOfTeams, noOfFields: Int = template.properties.minNoOfFields) : Triple<Tournament,List<Team>,List<Field>> {
+    fun generate(id: String, template: TournamentTemplate, noOfTeams: Int = template.properties.maxNoOfTeams, noOfFields: Int = template.properties.minNoOfFields) : Triple<Tournament,List<Team>,List<Field>> {
         val tournament = template.toTournament()
+        log.debug("Tournament template to tournament...")
+        log.debug("Tournament: id: ${template.id}")
+        tournament.gameroundTemplates.forEach { (t, u) -> log.debug("Gameround: $t, {Name: ${u.name}, Flatten: ${u.flattenGroupsOnImproperTeamNumber}, GroupSize: ${u.defaultGroupSize}}") }
         val fields = (1 .. noOfFields)
             .map {
                 val field = Field()
-                field.tournament = tournament.id
+                field.tournament = id
                 field.no = it
                 field.name = "Field $it"
-                field.desc = "This is field $it of tournament ${template.tournamentId}"
+                field.desc = "This is field $it of tournament $id"
                 field
             }.toList()
         val teams = (1 .. noOfTeams)
             .map {
                 val team = Team()
                 val time = LocalDateTime.now()
-                team.tournament = tournament.id
+                team.tournament = id
                 team.no = it
                 team.name = "Team $it"
                 team.isReferee = true
                 team.audit = AuditEntry("auto","auto", time,time)
-                team.desc = "This is team $it of tournament ${template.tournamentId}"
+                team.desc = "This is team $it of tournament $id"
                 team
             }.toList()
         return Triple(tournament,teams,fields)
     }
 
     fun generateAndInsert(id: String, template: TournamentTemplate, noOfTeams: Int = template.properties.maxNoOfTeams, noOfFields: Int = template.properties.minNoOfFields) : Mono<Tuple3<Tournament,List<Team>,List<Field>>> {
-        val triple = generate(template, noOfTeams, noOfFields)
+        val triple = generate(id, template, noOfTeams, noOfFields)
         triple.first.id = id
         return Mono.zip(
             tournamentService.insert(triple.first),

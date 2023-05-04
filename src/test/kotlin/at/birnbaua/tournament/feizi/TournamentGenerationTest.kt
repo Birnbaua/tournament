@@ -57,7 +57,7 @@ class TournamentGenerationTest {
         val triples: List<Triple<Tournament,List<Team>,List<Field>>> = (1..12)
             .toFlux()
             .flatMap { tts.findById("vb_standard_$it") }
-            .map { tgs.generate(it) }
+            .map { tgs.generate("vb_standard_$it",it) }
             .collectList().block()!!
         assert(triples.size == 12)
         triples.forEach {
@@ -70,7 +70,7 @@ class TournamentGenerationTest {
         val triples: List<Triple<Tournament,List<Team>,List<Field>>> = (1..12)
             .toFlux()
             .flatMap { tts.findById("vb_standard_$it") }
-            .map { tgs.generate(it) }
+            .map { tgs.generate("vb_standard_$it",it) }
             .collectList().block()!!
         triples.forEach {
             it.first.id = it.first.id+"_${it.third.size}"

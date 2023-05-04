@@ -5,8 +5,6 @@ import at.birnbaua.tournament.data.document.sub.gameround.MatchMakingConfig
 import at.birnbaua.tournament.data.service.feizi.GroupMakingConfig
 import at.birnbaua.tournament.data.service.feizi.SimpleOrderConfig
 import at.birnbaua.tournament.util.Tree
-import com.fasterxml.jackson.annotation.JsonInclude
-import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.core.mapping.Field
@@ -24,7 +22,6 @@ class GameroundTemplate {
     @Field(name = "template_desc")
     var desc: String = "Insert template description"
 
-    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
     @Field(name = "tournament")
     var tournament: String = ""
 
@@ -69,7 +66,7 @@ class GameroundTemplate {
         gr.desc = this.desc
         gr.groupBinding = this.groupBinding
         gr.orderConfig = this.orderConfig
-        gr.matchMakingConfigs = this.matchMakingConfig
+        gr.matchMakingConfig = this.matchMakingConfig
         gr.groupMakingConfig = this.groupMakingConfig
         return gr
     }

@@ -3,6 +3,7 @@ package at.birnbaua.tournament.feizi
 import at.birnbaua.tournament.config.tournament.vb4222.TournamentConfig2023
 import at.birnbaua.tournament.controller.*
 import at.birnbaua.tournament.data.service.*
+import at.birnbaua.tournament.data.service.feizi.SimpleMatchGeneratingService
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -23,6 +24,7 @@ class FeiziNormalTest {
     //Services
     @Autowired private lateinit var tts: TournamentTemplateService
     @Autowired private lateinit var gts: GameroundTemplateService
+    @Autowired private lateinit var smgs: SimpleMatchGeneratingService
     @Autowired private lateinit var tournamentService: TournamentService
     @Autowired private lateinit var grs: GameroundService
     @Autowired private lateinit var fs: FieldService
@@ -45,7 +47,9 @@ class FeiziNormalTest {
     fun testFirstRoundEvenFilled() {
         val teams = 51
         tournamentController.generateTournament("vb4222_2023","vb_standard_${ceil(teams.toDouble()/5).toInt()}", teams = teams).block()
-        gameroundController.generateGameround("vb4222_2023",0).block()
+        val gr = gameroundController.generateGameround("vb4222_2023",0).block()!!
+        fs.findAllByTournament("vb4222_2023").collectList().map { smgs.generateMatchesFeizi(gr,it) }.flatMap { ms.saveAll(it).collectList() }.block()
+        gameroundController.generateGameround("vb4222_2023",1).block()
     }
 
     @Test
