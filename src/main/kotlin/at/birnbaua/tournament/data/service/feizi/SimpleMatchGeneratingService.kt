@@ -1,5 +1,6 @@
 package at.birnbaua.tournament.data.service.feizi
 
+import at.birnbaua.tournament.data.document.CompositeId
 import at.birnbaua.tournament.data.document.Field
 import at.birnbaua.tournament.data.document.Gameround
 import at.birnbaua.tournament.data.document.Match
@@ -59,6 +60,7 @@ class SimpleMatchGeneratingService {
                 }
             }
         }
+        matches.forEach { it.id = CompositeId(it.tournament,it.no) }
         return matches
     }
 
