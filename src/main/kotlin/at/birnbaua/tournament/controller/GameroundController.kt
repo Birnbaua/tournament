@@ -5,6 +5,8 @@ import at.birnbaua.tournament.data.document.Match
 import at.birnbaua.tournament.data.service.GameroundService
 import at.birnbaua.tournament.data.service.MatchService
 import at.birnbaua.tournament.data.service.TournamentService
+import at.birnbaua.tournament.data.service.feizi.SimpleOrderService
+import at.birnbaua.tournament.data.service.feizi.SimpleResult
 import at.birnbaua.tournament.data.service.gen.GameroundGeneratingService
 import at.birnbaua.tournament.pdf.PdfService
 import org.springframework.beans.factory.annotation.Autowired
@@ -29,6 +31,7 @@ class GameroundController {
     @Autowired private lateinit var ts: TournamentService
     @Autowired private lateinit var gs: GameroundService
     @Autowired private lateinit var ggs: GameroundGeneratingService
+    @Autowired private lateinit var sos: SimpleOrderService
     @Autowired private lateinit var ms: MatchService
     @Autowired private lateinit var pdfService: PdfService
 
@@ -56,6 +59,17 @@ class GameroundController {
 
     @GetMapping(path = ["/{no}/generate/matches"])
     fun generateMatchesOfGameround(@PathVariable tournament: String, @PathVariable no: Int) : Flux<Match> { return gs.generateMatchesOf(tournament,no,LocalDateTime.now()) }
+
+    @GetMapping(path = ["/{no}/generate/results"])
+    fun generateResults(@PathVariable tournament: String, @PathVariable no: Int) : Mono<Gameround> {
+        return gs.findByTournamentAndNo(tournament, no)
+            .zipWhen { ms.findAllByGameround(tournament, no).collectList() }
+            .map {
+                it.t1.results = sos.genResults(it.t2,it.t1.results.associateBy { it.team },it.t1.groups, it.t1.orderConfig, 0)
+                it.t1
+            }
+            .flatMap { gs.save(it) }
+    }
 
     @GetMapping(path = ["/{no}/pdf"], produces = [MediaType.APPLICATION_PDF_VALUE])
     fun genPdf(@PathVariable tournament: String, @PathVariable no: Int) : Mono<ResponseEntity<ByteArray>> {

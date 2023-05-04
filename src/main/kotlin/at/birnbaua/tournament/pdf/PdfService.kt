@@ -1,6 +1,9 @@
 package at.birnbaua.tournament.pdf
 
+import at.birnbaua.tournament.data.document.Field
 import at.birnbaua.tournament.data.document.Match
+import at.birnbaua.tournament.data.document.sub.EmbeddedField
+import at.birnbaua.tournament.data.document.sub.EmbeddedTeam
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -39,8 +42,7 @@ class PdfService {
      * @since 1.0
      */
     fun matchesToPdf(matches: List<Match>, name: String = "Spielberichtsbogen") : ByteArray {
-        log.info("Transforming matches to pdf...")
-        return toPdf(generateMatchesHTML(matches,name))
+        return toPdf(generateMatchesHTML(matches.sortedBy { it.no },name))
     }
 
     fun generateMatchesHTML(matches: List<Match>, name: String = "Spielberichtsbogen") : List<String> {
@@ -72,10 +74,10 @@ class PdfService {
         context.setVariable("title",name)
         context.setVariable("gameround",match.gameround)
         context.setVariable("match_no",match.no)
-        context.setVariable("field",match.field)
-        context.setVariable("team_a",match.teamA)
-        context.setVariable("team_b",match.teamB)
-        context.setVariable("referee",match.referee)
+        context.setVariable("field",if(match.field != null) match.field else EmbeddedField(-1,""))
+        context.setVariable("team_a",if(match.teamA != null) match.teamA else EmbeddedTeam(-1,""))
+        context.setVariable("team_b",if(match.teamB != null) match.teamB else EmbeddedTeam(-1,""))
+        context.setVariable("referee",if(match.referee != null) match.referee else EmbeddedTeam(-1,""))
         return engine.process(template,context)
     }
 

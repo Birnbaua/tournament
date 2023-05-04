@@ -4,10 +4,12 @@ import at.birnbaua.tournament.data.document.Gameround
 import at.birnbaua.tournament.data.document.Team
 import at.birnbaua.tournament.data.document.Tournament
 import at.birnbaua.tournament.data.document.sub.EmbeddedGroup
+import at.birnbaua.tournament.data.document.sub.EmbeddedResult
 import at.birnbaua.tournament.data.document.sub.EmbeddedTeam
 import at.birnbaua.tournament.data.document.template.GameroundTemplate
 import at.birnbaua.tournament.data.service.TeamService
 import at.birnbaua.tournament.data.service.GameroundService
+import at.birnbaua.tournament.data.service.feizi.SimpleResult
 import at.birnbaua.tournament.exception.ResourceNotFoundException
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -25,6 +27,7 @@ class GameroundGeneratingService {
         val gr = genDataFromTemplate(template, gameroundNumber)
         log.debug("Generate Gameround instance with ${teams.size} teams.")
         gr.groups.addAll(toGroups(template, teams))
+        gr.results = gr.groups.flatMap { it.teams }.map{ SimpleResult(it)}.toMutableList()
         return gr
     }
 

@@ -21,6 +21,7 @@ class MatchService {
 
     fun insert(entity: Match) : Mono<Match> { return repo.insert(entity) }
     fun save(publisher: Publisher<Match>) : Flux<Match> { return repo.saveAll(publisher) }
+    fun save(entity: Match) : Mono<Match> { return repo.save(entity) }
     fun saveAll(iterable: Iterable<Match>) : Flux<Match> { return repo.saveAll(iterable) }
     fun findByTournamentAndNo(tournament: String, no: Int) : Mono<Match> { return repo.findByTournamentAndNo(tournament, no)}
     fun findAllByTournament(tournament: String) : Flux<Match> { return repo.findAllByTournament(tournament) }

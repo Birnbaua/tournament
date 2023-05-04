@@ -60,7 +60,11 @@ class SimpleMatchGeneratingService {
                 }
             }
         }
-        matches.forEach { it.id = CompositeId(it.tournament,it.no) }
+        matches.forEach {
+            it.id = CompositeId(it.tournament,it.no)
+            it.tournament = gameround.tournament
+            it.gameround = gameround.no
+        }
         return matches
     }
 

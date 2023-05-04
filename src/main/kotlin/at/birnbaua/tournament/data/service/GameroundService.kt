@@ -6,6 +6,7 @@ import at.birnbaua.tournament.data.document.Tournament
 import at.birnbaua.tournament.data.document.template.GameroundTemplate
 import at.birnbaua.tournament.data.repository.GameroundRepository
 import at.birnbaua.tournament.data.service.feizi.SimpleMatchGeneratingService
+import at.birnbaua.tournament.data.service.feizi.SimpleOrderService
 import at.birnbaua.tournament.data.service.gen.GameroundGeneratingService
 import at.birnbaua.tournament.exception.ResourceNotFoundException
 import org.bson.types.ObjectId
@@ -33,6 +34,7 @@ class GameroundService {
     @Autowired private lateinit var mgs: SimpleMatchGeneratingService
     @Autowired private lateinit var fs: FieldService
     @Autowired private lateinit var ms: MatchService
+    @Autowired private lateinit var sos: SimpleOrderService
     private val log: Logger = LoggerFactory.getLogger(GameroundService::class.java)
     private val genFeiziOnly: Boolean = true
 
