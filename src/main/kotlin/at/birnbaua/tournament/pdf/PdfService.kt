@@ -2,6 +2,7 @@ package at.birnbaua.tournament.pdf
 
 import at.birnbaua.tournament.data.document.Field
 import at.birnbaua.tournament.data.document.Match
+import at.birnbaua.tournament.data.document.Team
 import at.birnbaua.tournament.data.document.sub.EmbeddedField
 import at.birnbaua.tournament.data.document.sub.EmbeddedTeam
 import org.slf4j.Logger
@@ -28,7 +29,10 @@ class PdfService {
     private val log: Logger = LoggerFactory.getLogger(PdfService::class.java)
     private val resolver = StringTemplateResolver()
     private val engine = TemplateEngine()
+    private val lineSeperator = System.lineSeparator()
     var templatePath = "data/match_report.html"
+    var maxLineLength = 15
+    var maxLineCount = 3
 
     init{
         log.info("Pdf-Service started...")
@@ -74,10 +78,10 @@ class PdfService {
         context.setVariable("title",name)
         context.setVariable("gameround",match.gameround)
         context.setVariable("match_no",match.no)
-        context.setVariable("field",if(match.field != null) match.field else EmbeddedField(-1,""))
-        context.setVariable("team_a",if(match.teamA != null) match.teamA else EmbeddedTeam(-1,""))
-        context.setVariable("team_b",if(match.teamB != null) match.teamB else EmbeddedTeam(-1,""))
-        context.setVariable("referee",if(match.referee != null) match.referee else EmbeddedTeam(-1,""))
+        context.setVariable("field",if(match.field != null) match.field!!.process() else EmbeddedField(-1,""))
+        context.setVariable("team_a",if(match.teamA != null) match.teamA!!.process() else EmbeddedTeam(-1,""))
+        context.setVariable("team_b",if(match.teamB != null) match.teamB!!.process() else EmbeddedTeam(-1,""))
+        context.setVariable("referee",if(match.referee != null) match.referee!!.process() else EmbeddedTeam(-1,""))
         return engine.process(template,context)
     }
 
@@ -89,5 +93,15 @@ class PdfService {
             Files.write(Path(templatePath),"".toByteArray(Charsets.UTF_8))
         }
         return file.readText(Charsets.UTF_8)
+    }
+
+    private fun EmbeddedField.process() : EmbeddedField {
+        this.name = this.name?.chunked(maxLineLength)?.joinToString(lineSeperator, limit = maxLineCount)
+        return this
+    }
+
+    private fun EmbeddedTeam.process() : EmbeddedTeam {
+        this.name = this.name.chunked(maxLineLength).joinToString(lineSeperator, limit = maxLineCount)
+        return this
     }
 }

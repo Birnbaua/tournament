@@ -3,12 +3,8 @@ package at.birnbaua.tournament.controller
 import at.birnbaua.tournament.data.document.Gameround
 import at.birnbaua.tournament.data.document.Match
 import at.birnbaua.tournament.data.service.GameroundService
-import at.birnbaua.tournament.data.service.MatchService
 import at.birnbaua.tournament.data.service.TournamentService
-import at.birnbaua.tournament.data.service.feizi.SimpleOrderService
-import at.birnbaua.tournament.data.service.feizi.SimpleResult
 import at.birnbaua.tournament.data.service.gen.GameroundGeneratingService
-import at.birnbaua.tournament.pdf.PdfService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -18,22 +14,17 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import java.time.LocalDateTime
 
 @RestController
-@RequestMapping("/\${api.tournament:#{apiProperties.tournament}}/{tournament}/\${api.gameround:#{apiProperties.gameround}}")
+@RequestMapping("/#{apiProperties.tournament}/{tournament}/#{apiProperties.gameround}")
 class GameroundController {
 
-    @Autowired private lateinit var ts: TournamentService
     @Autowired private lateinit var gs: GameroundService
-    @Autowired private lateinit var ggs: GameroundGeneratingService
-    @Autowired private lateinit var sos: SimpleOrderService
-    @Autowired private lateinit var ms: MatchService
-    @Autowired private lateinit var pdfService: PdfService
+    @Autowired private lateinit var cs: ControllerService
 
     @GetMapping
     fun getAll(@PathVariable tournament: String) : Flux<Gameround> { return gs.findAllByTournament(tournament) }
@@ -51,34 +42,14 @@ class GameroundController {
     fun delete(@PathVariable tournament: String, @PathVariable no: Int) : Mono<Void> { return gs.deleteByTournamentAndNo(tournament,no) }
 
     @GetMapping(path = ["/{no}/generate"])
-    fun generateGameround(@PathVariable tournament: String, @PathVariable no: Int) : Mono<Gameround> {
-        return ts.findById(tournament)
-            .flatMap { ggs.generateGameround(it,no) }
-            .flatMap { gs.save(it) }
-    }
+    fun generateGameround(@PathVariable tournament: String, @PathVariable no: Int) : Mono<Gameround> { return cs.generateAndSaveGameround(tournament,no) }
 
     @GetMapping(path = ["/{no}/generate/matches"])
     fun generateMatchesOfGameround(@PathVariable tournament: String, @PathVariable no: Int) : Flux<Match> { return gs.generateMatchesOf(tournament,no,LocalDateTime.now()) }
 
     @GetMapping(path = ["/{no}/generate/results"])
-    fun generateResults(@PathVariable tournament: String, @PathVariable no: Int) : Mono<Gameround> {
-        return gs.findByTournamentAndNo(tournament, no)
-            .zipWhen { ms.findAllByGameround(tournament, no).collectList() }
-            .map {
-                it.t1.results = sos.genResults(it.t2,it.t1.results.associateBy { it.team },it.t1.groups, it.t1.orderConfig, 0)
-                it.t1
-            }
-            .flatMap { gs.save(it) }
-    }
+    fun generateResults(@PathVariable tournament: String, @PathVariable no: Int) : Mono<Gameround> { return cs.generateAndSaveResults(tournament, no) }
 
     @GetMapping(path = ["/{no}/pdf"], produces = [MediaType.APPLICATION_PDF_VALUE])
-    fun genPdf(@PathVariable tournament: String, @PathVariable no: Int) : Mono<ResponseEntity<ByteArray>> {
-        return ms.findAllByGameround(tournament,no)
-            .collectList()
-            .map { pdfService.matchesToPdf(it) }
-            .map { ResponseEntity.ok()
-                .header("Content-Disposition","inline; filename=spiele.pdf")
-                .body(it)
-            }
-    }
+    fun genPdf(@PathVariable tournament: String, @PathVariable no: Int) : Mono<ResponseEntity<ByteArray>> { return cs.generateMatchPDF(tournament,no) }
 }

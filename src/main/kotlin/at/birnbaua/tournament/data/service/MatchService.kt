@@ -1,6 +1,7 @@
 package at.birnbaua.tournament.data.service
 
 import at.birnbaua.tournament.data.document.Match
+import at.birnbaua.tournament.data.document.Tournament
 import at.birnbaua.tournament.data.repository.MatchRepository
 import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
@@ -20,11 +21,13 @@ class MatchService {
     private val log = LoggerFactory.getLogger(MatchService::class.java)
 
     fun insert(entity: Match) : Mono<Match> { return repo.insert(entity) }
+    fun insert(entities: Iterable<Match>) : Flux<Match> { return repo.insert(entities) }
     fun save(publisher: Publisher<Match>) : Flux<Match> { return repo.saveAll(publisher) }
     fun save(entity: Match) : Mono<Match> { return repo.save(entity) }
     fun saveAll(iterable: Iterable<Match>) : Flux<Match> { return repo.saveAll(iterable) }
     fun findByTournamentAndNo(tournament: String, no: Int) : Mono<Match> { return repo.findByTournamentAndNo(tournament, no)}
     fun findAllByTournament(tournament: String) : Flux<Match> { return repo.findAllByTournament(tournament) }
+    fun countMatchesByTournament(tournament: String) : Mono<Long> { return repo.countMatchesByTournament(tournament) }
 
     fun findAllByGameround(tournament: String, gameround: Int) : Flux<Match> { return repo.findAllByTournamentAndGameround(tournament,gameround) }
     fun deleteByTournamentAndNo(tournament: String, no: Int) : Mono<Long> { return repo.deleteByTournamentAndNo(tournament, no) }

@@ -18,7 +18,7 @@ class SimpleMatchGeneratingService {
 
     val log: Logger = LoggerFactory.getLogger(SimpleMatchGeneratingService::class.java)
 
-    fun generateMatchesFeizi(gameround: Gameround, allFields: List<Field>, startTime: LocalDateTime = LocalDateTime.now()) : List<Match> {
+    fun generateMatchesFeizi(gameround: Gameround, allFields: List<Field>, startTime: LocalDateTime = LocalDateTime.now(), offset: Int = gameround.matchNoOffset) : List<Match> {
         val matches = mutableListOf<Match>()
         val binding = gameround.groupBinding
         val groups = gameround.groups.associateBy { it.no }

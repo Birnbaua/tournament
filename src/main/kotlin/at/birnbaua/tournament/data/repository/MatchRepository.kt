@@ -19,6 +19,7 @@ interface MatchRepository : ReactiveMongoRepository<Match,CompositeId> {
     fun deleteByTournamentAndNo(tournament: String, no: Int) : Mono<Long>
     fun deleteAllByTournament(tournament: String) : Mono<Long>
     fun deleteAllByTournamentAndNoIn(tournament: String, no: List<Int>) : Mono<Long>
+    fun countMatchesByTournament(tournament: String) : Mono<Long>
 
     @Query(value = "{'tournament':  ?0}")
     @Update(pipeline = [

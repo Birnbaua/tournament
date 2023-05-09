@@ -40,10 +40,11 @@ class GameroundService {
 
     fun save(entity: Gameround) : Mono<Gameround> { return repo.save(entity) }
     fun save(publisher: Mono<Gameround>) : Mono<Gameround> { return publisher.flatMap { repo.save(it) } }
+    fun insert(entity: Gameround) : Mono<Gameround> { return repo.insert(entity) }
     fun insert(entities: Iterable<Gameround>) : Flux<Gameround> { return repo.insert(entities) }
     fun findById(id: ObjectId) : Mono<Gameround> { return repo.findById(id) }
     fun findByTournamentAndNo(tournament: String, no: Int) : Mono<Gameround> { return repo.findByTournamentAndNo(tournament, no) }
-    fun findPreviousByTournamentAndNo(tournament: String, no: Int) : Mono<Gameround> { return repo.findByTournamentAndNo(tournament, no-1)}
+    fun findPreviousByTournamentAndNo(tournament: String, no: Int) : Mono<Gameround> { return repo.findByTournamentAndNo(tournament, no-1) }
     fun findAllByTournament(tournament: String) : Flux<Gameround> { return repo.findAllByTournament(tournament) }
     fun deleteByTournamentAndNo(tournament: String, no: Int) : Mono<Void> { return repo.deleteByTournamentAndNo(tournament, no) }
     fun deleteAllByTournament(tournament: String) : Mono<Void> { return repo.deleteAllByTournament(tournament) }

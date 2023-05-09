@@ -11,13 +11,13 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 @RestController
-@RequestMapping("/\${api.tournament:#{apiProperties.tournament}}")
+@RequestMapping("/#{apiProperties.tournament}")
 class TournamentController {
 
     private val log: Logger = LoggerFactory.getLogger(TournamentController::class.java)
 
     @Autowired private lateinit var service: TournamentService
-    @Autowired private lateinit var tgs: TournamentGeneratingService
+    @Autowired private lateinit var cs: ControllerService
 
     @GetMapping
     fun getAll(@RequestParam active: Boolean?) : Flux<Tournament> { return service.findAll() }
@@ -49,14 +49,7 @@ class TournamentController {
                            @RequestParam(required = false, defaultValue = "true") feizi: Boolean = true,
                            @RequestParam(required = false, defaultValue = "-1") teams: Int = -1,
                            @RequestParam(required = false, defaultValue = "-1") fields: Int = -1) : Mono<Tournament> {
-        return if(template.isNotBlank()) {
-            tgs.generateAndInsert(id,template,teams,fields)
-                .doOnNext { log.info("Created tournament with id: $id successfully <3") }
-                .doOnError { log.error("Failed to create tournament with id: $id of template $template") }
-                .map { it.t1 }
-        } else {
-            service.generateAndInsertFeiziByTeamNo(id,teams)
-        }
+        return cs.generateAndSaveTournamentWithTeamsAndFields(template, id, teams, fields).map { it.t1 }
     }
 
 }

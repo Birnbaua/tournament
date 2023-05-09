@@ -3,6 +3,7 @@ package at.birnbaua.tournament.recovery
 import at.birnbaua.tournament.data.document.*
 import at.birnbaua.tournament.data.service.*
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -64,10 +65,12 @@ class RecoveryService {
         saveAllToFile(tournament,Path.of("data/recovery/temp"))
         Mono.just(Files.readString(Path.of("$path/$tournament/tournament.json")))
             .flatMap { tournamentService.insert(mapper.readValue(it,Tournament::class.java)) }.subscribe()
+
+        /*
         Mono.just(Files.readString(Path.of("$path/$tournament/gamerounds.json")))
             .flatMapMany {
                 val type = mapper.typeFactory.constructCollectionType(List::class.java,Gameround::class.java)
-                gameroundService.insert(mapper.readValue(it, type))
+                mapper.readValue(it,type)
             }.subscribe()
         Mono.just(Files.readString(Path.of("$path/$tournament/fields.json")))
             .flatMapMany {
@@ -84,6 +87,8 @@ class RecoveryService {
                 val type = mapper.typeFactory.constructCollectionType(List::class.java, Match::class.java)
                 gameroundService.insert(mapper.readValue(it, type))
             }.subscribe()
+
+         */
     }
 
     fun copyToHistory(tournament: String, path: Path = Path.of(historyPath)) {
