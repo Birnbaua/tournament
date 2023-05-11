@@ -12,11 +12,11 @@ import org.springframework.stereotype.Component
 @Component
 class TournamentTemplateLifecycle : AbstractMongoEventListener<TournamentTemplate>() {
 
-    private val log: Logger = LoggerFactory.getLogger(TreeBeforeConvertCallback::class.java)
+    private val log: Logger = LoggerFactory.getLogger(TournamentTemplateLifecycle::class.java)
     @Autowired private lateinit var gameroundTemplateLifecycle: GameroundTemplateLifecycle
 
     override fun onBeforeConvert(event: BeforeConvertEvent<TournamentTemplate>) {
-        log.debug("Before-Tournament-Convert called")
+        log.trace("Before-Tournament-Convert called")
         event.source.gameroundTemplates.forEach { template ->
             gameroundTemplateLifecycle.onBeforeConvert(template.value)
         }
@@ -24,7 +24,7 @@ class TournamentTemplateLifecycle : AbstractMongoEventListener<TournamentTemplat
     }
 
     override fun onAfterConvert(event: AfterConvertEvent<TournamentTemplate>) {
-        log.debug("After-Tournament-Convert called")
+        log.trace("After-Tournament-Convert called")
         event.source.gameroundTemplates.forEach { template ->
             gameroundTemplateLifecycle.onAfterConvert(template.value)
         }

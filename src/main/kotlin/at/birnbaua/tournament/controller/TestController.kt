@@ -1,6 +1,6 @@
 package at.birnbaua.tournament.controller
 
-import at.birnbaua.tournament.config.tournament.vb4222.GroupInternalRound
+import at.birnbaua.tournament.config.tournament.vb4222.IntermediateRound
 import at.birnbaua.tournament.data.document.Field
 import at.birnbaua.tournament.data.document.Gameround
 import at.birnbaua.tournament.data.document.Match
@@ -11,7 +11,6 @@ import at.birnbaua.tournament.data.service.feizi.SimpleMatchGeneratingService
 import at.birnbaua.tournament.data.service.gen.GameroundGeneratingService
 import at.birnbaua.tournament.pdf.PdfService
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -55,7 +54,7 @@ class TestController {
 
     private fun genGameround(noOfTeams: Int) : Gameround {
         val noOfGroups = if(noOfTeams % 5 == 0) noOfTeams/5 else noOfTeams/5 +1
-        val gameroundTemplate = GroupInternalRound().genGameroundTemplate("Gruppenphase","Beschreibung", noOfGroups)
+        val gameroundTemplate = IntermediateRound().genGameroundTemplate("Gruppenphase","Beschreibung", noOfGroups)
         gameroundTemplate.matchNumberOffset = 0
         val ggs = GameroundGeneratingService()
         val teams = (0 until noOfTeams).map {

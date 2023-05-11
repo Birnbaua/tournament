@@ -1,6 +1,6 @@
 package at.birnbaua.tournament
 
-import at.birnbaua.tournament.config.tournament.vb4222.GroupInternalRound
+import at.birnbaua.tournament.config.tournament.vb4222.IntermediateRound
 import at.birnbaua.tournament.data.document.Field
 import at.birnbaua.tournament.data.document.Gameround
 import at.birnbaua.tournament.data.document.Match
@@ -64,7 +64,7 @@ class Feizi1MatchGeneratingTests {
 
     private fun genGameround(noOfTeams: Int) : Gameround {
         val noOfGroups = if(noOfTeams % 5 == 0) noOfTeams/5 else noOfTeams/5 +1
-        val gameroundTemplate = GroupInternalRound().genGameroundTemplate("Gruppenphase","Beschreibung", noOfGroups)
+        val gameroundTemplate = IntermediateRound().genGameroundTemplate("Gruppenphase","Beschreibung", noOfGroups)
         gameroundTemplate.matchNumberOffset = 0
         val ggs = GameroundGeneratingService()
         val teams = (0 until noOfTeams).map {

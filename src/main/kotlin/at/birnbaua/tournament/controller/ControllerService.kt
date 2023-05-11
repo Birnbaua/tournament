@@ -101,7 +101,9 @@ class ControllerService {
             }
     }
 
+
     fun generateAndSaveResults(tournament: String, no: Int) : Mono<Gameround> {
+        //TODO("MAKE ORDERING FOR EACH LEAF OF GROUPS AND NOT ALL TOGETHER --> IS MIXING UP EXTERNAL RANKING")
         return grs.findByTournamentAndNo(tournament, no)
             .zipWhen { ms.findAllByGameround(tournament, no).collectList() }
             .map {

@@ -86,7 +86,7 @@ class SimpleMatchGeneratingService {
 
     private fun isInternalMatchMaking(config: MatchMakingConfig) : Boolean {
         var isInternal = true
-        log.trace("Check if match making config is for group internal matchmaking")
+        log.debug("Check if match making config is for group internal matchmaking")
         for(template in config.templates) {
             if(
                 (template.teamA?.group != null && template.teamA?.group?.toInt() != config.groupStartingIndex) ||
@@ -97,6 +97,7 @@ class SimpleMatchGeneratingService {
                 break
             }
         }
+        log.debug("Is group internal matchmaking: $isInternal")
         return isInternal
     }
 }

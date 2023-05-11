@@ -23,8 +23,8 @@ class TournamentConfig2023 {
     }
 
     private fun genGameroundConfig(numberOfGroups: Int) : MutableMap<Int,GameroundTemplate> {
-        val firstRound = GroupInternalRound().genGameroundTemplate("Vorrunde","VB4222 Vorrunde 2023", numberOfGroups)
-        val secondRound = GroupInternalRound().genGameroundTemplate("Zwischenrunde","VB4222 Vorrunde 2023", numberOfGroups)
+        val firstRound = PreliminaryRound().genGameroundTemplate("Vorrunde","VB4222 Vorrunde 2023", numberOfGroups)
+        val secondRound = IntermediateRound().genGameroundTemplate("Zwischenrunde","VB4222 Vorrunde 2023", numberOfGroups)
         val thirdRound = CrossPlaysRound().genGameroundTemplate("Kreuzspiele","VB4222 Kreuzspiele 2023", numberOfGroups)
         val fourthRound = PlacementRound().genGameroundTemplate("Platzierungsspiele", "VB4222 Platzierungsspiele 2023", numberOfGroups)
         firstRound.flattenGroupsOnImproperTeamNumber = true

@@ -8,7 +8,7 @@ import at.birnbaua.tournament.data.service.feizi.OrderProperty
 import at.birnbaua.tournament.data.service.feizi.SimpleOrderConfig
 
 @Suppress("unused")
-class GroupInternalRound() {
+class PreliminaryRound() {
     var id = "vb4222_1"
     var noOfSets = 2
     var setTime = 8
@@ -78,13 +78,8 @@ class GroupInternalRound() {
     }
 
     fun genGameroundTemplate(name: String, desc: String, numberOfGroups: Int = 1) : GameroundTemplate {
-        val template =  when(numberOfGroups) {
-            1,2 -> genSmall(name,desc,numberOfGroups)
-            3,4 -> genMedium(name,desc,numberOfGroups)
-            5,6,7,8 -> genLarge(name,desc,numberOfGroups)
-            9,10,11,12 -> genXLarge(name,desc,numberOfGroups)
-            else -> throw IllegalArgumentException("The number of group needs to be between 1 and 12!")
-        }
+        if(numberOfGroups <=0 ||numberOfGroups >= 12) throw IllegalArgumentException("The number of group needs to be between 1 and 12!")
+        val template =  gen(name,desc,numberOfGroups)
         template.id = this.id
         template.groups = numberOfGroups
         template.orderConfig = genOrderConfig()
@@ -102,7 +97,7 @@ class GroupInternalRound() {
         return config
     }
 
-    private fun genSmall(name: String, desc: String, no: Int) : GameroundTemplate {
+    private fun gen(name: String, desc: String, no: Int) : GameroundTemplate {
         val grt = GameroundTemplate()
         grt.groupBinding.addOrReplace(null, setOf(), (0 until no).toList())
         grt.matchMakingConfig[null] = genMatchMakingConfig()
@@ -110,55 +105,6 @@ class GroupInternalRound() {
         grt.defaultGroupSize = 5
         grt.name = "Template $name of style <Feizi> with $no groups"
         grt.flattenGroupsOnImproperTeamNumber = true
-        grt.desc = desc
-        grt.gameroundName = name
-        grt.desc = desc
-        return grt
-    }
-
-    private fun genMedium(name: String, desc: String, no: Int) : GameroundTemplate {
-        val grt = GameroundTemplate()
-        grt.groupBinding.addOrReplace(null, setOf("PROFESSIONAL","HOBBY"), listOf())
-        grt.groupBinding.addOrReplace("PROFESSIONAL", setOf(), (0 until 2).toList())
-        grt.groupBinding.addOrReplace("HOBBY", setOf(), (2 until no).toList())
-        grt.matchMakingConfig[null] = genMatchMakingConfig()
-        grt.groupMakingConfig[null] = genGroupMakingConfig()
-        grt.defaultGroupSize = 5
-        grt.flattenGroupsOnImproperTeamNumber = true
-        grt.name = "Template $name of style <Feizi> with $no groups"
-        grt.desc = desc
-        grt.gameroundName = name
-        grt.desc = desc
-        return grt
-    }
-
-    private fun genLarge(name: String, desc: String, no: Int) : GameroundTemplate {
-        val grt = GameroundTemplate()
-        grt.groupBinding.addOrReplace(null, setOf("PROFESSIONAL","HOBBY"), listOf())
-        grt.groupBinding.addOrReplace("PROFESSIONAL", setOf(), (0 until 4).toList())
-        grt.groupBinding.addOrReplace("HOBBY", setOf(), (4 until 8).toList())
-        grt.matchMakingConfig[null] = genMatchMakingConfig()
-        grt.groupMakingConfig[null] = genGroupMakingConfig()
-        grt.defaultGroupSize = 5
-        grt.flattenGroupsOnImproperTeamNumber = true
-        grt.name = "Template $name of style <Feizi> with $no groups"
-        grt.desc = desc
-        grt.gameroundName = name
-        grt.desc = desc
-        return grt
-    }
-
-    private fun genXLarge(name: String, desc: String, no: Int) : GameroundTemplate {
-        val grt = GameroundTemplate()
-        grt.groupBinding.addOrReplace(null, setOf("PROFESSIONAL","HOBBY A","HOBBY B"), listOf())
-        grt.groupBinding.addOrReplace("PROFESSIONAL", setOf(), (0 until 4).toList())
-        grt.groupBinding.addOrReplace("HOBBY A", setOf(), (4 until 8).toList())
-        grt.groupBinding.addOrReplace("HOBBY B", setOf(), (8 until 12).toList())
-        grt.matchMakingConfig[null] = genMatchMakingConfig()
-        grt.groupMakingConfig[null] = genGroupMakingConfig()
-        grt.defaultGroupSize = 5
-        grt.flattenGroupsOnImproperTeamNumber = true
-        grt.name = "Template $name of style <Feizi> with $no groups"
         grt.desc = desc
         grt.gameroundName = name
         grt.desc = desc

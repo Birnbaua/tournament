@@ -1,7 +1,7 @@
 package at.birnbaua.tournament.startup
 
 import at.birnbaua.tournament.config.tournament.vb4222.CrossPlaysRound
-import at.birnbaua.tournament.config.tournament.vb4222.GroupInternalRound
+import at.birnbaua.tournament.config.tournament.vb4222.IntermediateRound
 import at.birnbaua.tournament.config.tournament.vb4222.TournamentConfig2023
 import at.birnbaua.tournament.data.service.GameroundTemplateService
 import at.birnbaua.tournament.data.service.MatchService
@@ -28,14 +28,14 @@ class FeiziDefault {
         defaultTournament.id = "${defaultTournament.id}_default"
         tts.insertIfNotExisting(defaultTournament).subscribe()
         for(i in 1..12) {
-            val preliminaryRound = GroupInternalRound().genGameroundTemplate("VB4222 Vorrunde","Vorrunde",i)
+            val preliminaryRound = IntermediateRound().genGameroundTemplate("VB4222 Vorrunde","Vorrunde",i)
             preliminaryRound.id = "vb4222_0_$i"
             preliminaryRound.tournament = TournamentConfig2023().genTournamentTemplate().tournamentId!!
             preliminaryRound.groups = i
             gts.insertIfNotExisting(preliminaryRound).subscribe()
         }
         for(i in 1..12) {
-            val preliminaryRound = GroupInternalRound().genGameroundTemplate("VB4222 Zwischenrunde","Zwischenrunde",i)
+            val preliminaryRound = IntermediateRound().genGameroundTemplate("VB4222 Zwischenrunde","Zwischenrunde",i)
             preliminaryRound.id = "vb4222_1_$i"
             preliminaryRound.tournament = TournamentConfig2023().genTournamentTemplate().tournamentId!!
             preliminaryRound.groups = i
