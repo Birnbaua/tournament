@@ -47,8 +47,8 @@ class TournamentController {
     fun generateTournament(@PathVariable id: String,
                            @RequestParam(required = false, defaultValue = "") template: String = "",
                            @RequestParam(required = false, defaultValue = "true") feizi: Boolean = true,
-                           @RequestParam(required = false, defaultValue = "-1") teams: Int = -1,
-                           @RequestParam(required = false, defaultValue = "-1") fields: Int = -1) : Mono<Tournament> {
+                           @RequestParam(required = false) teams: Int? = null,
+                           @RequestParam(required = false) fields: Int? = null) : Mono<Tournament> {
         return cs.generateAndSaveTournamentWithTeamsAndFields(template, id, teams, fields).map { it.t1 }
     }
 

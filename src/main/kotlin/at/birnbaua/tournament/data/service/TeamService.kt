@@ -28,6 +28,7 @@ class TeamService {
 
     fun insert(entity: Team) : Mono<Team> { return repo.insert(entity) }
     fun insert(iterable: Iterable<Team>) : Flux<Team> { return repo.insert(iterable) }
+    fun save(entity: Team) : Mono<Team> { return repo.save(entity) }
     fun findById(id: ObjectId) : Mono<Team> { return repo.findById(id) }
     fun findByTournamentAndNo(tournament: String, no: Int) : Mono<Team> { return repo.findByTournamentAndNo(tournament, no)}
     fun findAllByTournament(tournament: String) : Flux<Team> { return repo.findAllByTournament(tournament) }

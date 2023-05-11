@@ -14,10 +14,13 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 
 @RestController
 @RequestMapping("/#{apiProperties.tournament}/{tournament}/#{apiProperties.gameround}")
@@ -45,7 +48,9 @@ class GameroundController {
     fun generateGameround(@PathVariable tournament: String, @PathVariable no: Int) : Mono<Gameround> { return cs.generateAndSaveGameround(tournament,no) }
 
     @GetMapping(path = ["/{no}/generate/matches"])
-    fun generateMatchesOfGameround(@PathVariable tournament: String, @PathVariable no: Int) : Flux<Match> { return gs.generateMatchesOf(tournament,no,LocalDateTime.now()) }
+    fun generateMatchesOfGameround(@PathVariable tournament: String, @PathVariable no: Int, @RequestParam time: LocalTime) : Flux<Match> {
+        return cs.generateAndSaveMatchesOfGameround(tournament,no,LocalDateTime.of(LocalDate.now(),time))
+    }
 
     @GetMapping(path = ["/{no}/generate/results"])
     fun generateResults(@PathVariable tournament: String, @PathVariable no: Int) : Mono<Gameround> { return cs.generateAndSaveResults(tournament, no) }

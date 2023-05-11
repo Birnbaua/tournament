@@ -52,7 +52,7 @@ class PdfService {
     fun generateMatchesHTML(matches: List<Match>, name: String = "Spielberichtsbogen") : List<String> {
         log.info("Process matches to pdfs...")
         val template = loadOrCreateTemplate()
-        return matches.map { process(it,template) }
+        return matches.map { process(it,template,name) }
     }
 
     /**

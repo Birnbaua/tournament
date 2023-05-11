@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import reactor.kotlin.core.publisher.toFlux
+import java.time.LocalDateTime
+import java.time.LocalTime
 import kotlin.math.ceil
 
 @SpringBootTest
@@ -48,15 +50,23 @@ class FeiziNormalTest {
     @Test
     fun testFirstRoundEvenFilled() {
         val teams = 51
+        var plus = 1L
         tournamentController.generateTournament("vb4222_2023","vb_standard_${ceil(teams.toDouble()/5).toInt()}", teams = teams).block()
         gameroundController.generateGameround("vb4222_2023",0).block()
-        gameroundController.generateMatchesOfGameround("vb4222_2023",0).collectList().block()
+        gameroundController.generateMatchesOfGameround("vb4222_2023",0, LocalTime.now()).collectList().block()
         ms.findAllByTournament("vb4222_2023")
-            .doOnNext { it.sets[0].pointsA = 1 }
+            .doOnNext { it.sets[0].pointsA = plus++ }
             .flatMap { ms.save(it) }
             .collectList().block()
         gameroundController.generateResults("vb4222_2023",0).block()
         gameroundController.generateGameround("vb4222_2023",1).block()
+        gameroundController.generateMatchesOfGameround("vb4222_2023",1, LocalTime.now()).collectList().block()
+        ms.findAllByTournament("vb4222_2023")
+            .doOnNext { it.sets[0].pointsA = plus++ }
+            .flatMap { ms.save(it) }
+            .collectList().block()
+        gameroundController.generateResults("vb4222_2023",1).block()
+        gameroundController.generateGameround("vb4222_2023",2).block()
 
     }
 

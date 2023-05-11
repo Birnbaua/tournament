@@ -32,8 +32,9 @@ class TournamentGeneratingService {
 
     fun generate(id: String, template: TournamentTemplate, noOfTeams: Int = template.properties.maxNoOfTeams, noOfFields: Int = template.properties.minNoOfFields) : Triple<Tournament,List<Team>,List<Field>> {
         val tournament = template.toTournament()
+        tournament.id = id
         log.debug("Tournament template to tournament...")
-        log.debug("Tournament: id: ${template.id}")
+        log.debug("Tournament id: $id, template id: ${template.id}, teams: $noOfTeams, fields: $noOfFields")
         tournament.gameroundTemplates.forEach { (t, u) -> log.debug("Gameround: $t, {Name: ${u.name}, Flatten: ${u.flattenGroupsOnImproperTeamNumber}, GroupSize: ${u.defaultGroupSize}}") }
         val fields = (1 .. noOfFields)
             .map {

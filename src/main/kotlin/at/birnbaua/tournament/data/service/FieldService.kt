@@ -33,6 +33,7 @@ class FieldService {
     fun deleteAllByTournament(tournament: String) : Mono<Long> { return repo.deleteAllByTournament(tournament) }
     fun deleteAll(): Mono<Void> { return repo.deleteAll() }
 
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     fun upsert(entity: Field) : Mono<Field> {
         return if(entity.id != null) { findById(entity.id!!) } else { findByTournamentAndNo(entity.tournament!!,entity.no!!) }
             .zipWhen { if(it.name != entity.name) ms.updateFieldNameByTournamentAndNo(it.tournament,it.no,entity.name) else Mono.empty() }

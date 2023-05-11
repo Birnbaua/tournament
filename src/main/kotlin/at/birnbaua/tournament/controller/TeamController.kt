@@ -14,6 +14,7 @@ class TeamController {
 
     @Autowired
     private lateinit var service: TeamService
+    @Autowired private lateinit var cs: ControllerService
 
     @GetMapping
     fun getAll(@PathVariable tournament: String) : Flux<Team> { return service.findAllByTournament(tournament) }
@@ -36,7 +37,7 @@ class TeamController {
 
     @PatchMapping("/{no}/rename")
     fun rename(@PathVariable tournament: String, @PathVariable no: Int, @RequestParam name: String) : Mono<Team> {
-        return service.rename(tournament,no,name)
+        return cs.renameTeam(tournament,no,name)
     }
 
     @PatchMapping("/{no}")

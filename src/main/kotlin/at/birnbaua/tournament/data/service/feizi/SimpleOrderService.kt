@@ -60,6 +60,7 @@ class SimpleOrderService {
                 } else {
                     result.externalRank = index.toLong()
                 }
+                log.debug("Rank ${result.externalRank}: ${result.team.name}, points: ${result.points}, gamepoints: ${result.gamePoints}, external correction: ${result.externalCorrection} colliding: ${result.hasCollidingRankExternal}")
             }
     }
 

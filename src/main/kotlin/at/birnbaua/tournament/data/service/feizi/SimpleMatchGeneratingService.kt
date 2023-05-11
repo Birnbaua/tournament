@@ -24,7 +24,7 @@ class SimpleMatchGeneratingService {
         val groups = gameround.groups.associateBy { it.no }
         val configs = gameround.matchMakingConfig
         val fields = allFields.sortedBy { it.no }
-        var matchNo = gameround.matchNoOffset
+        var matchNo = offset
         log.debug("Starting match generation with: ${fields.size} fields and ${gameround.groups.size} groups")
         for(config in configs) {
             val nodes = when (config.value.doOnSubNodes) {
@@ -61,9 +61,9 @@ class SimpleMatchGeneratingService {
             }
         }
         matches.forEach {
-            it.id = CompositeId(it.tournament,it.no)
             it.tournament = gameround.tournament
             it.gameround = gameround.no
+            it.id = CompositeId(it.tournament,it.no)
         }
         return matches
     }

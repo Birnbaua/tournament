@@ -7,6 +7,7 @@ import at.birnbaua.tournament.data.service.feizi.SimpleOrderService
 import at.birnbaua.tournament.data.service.gen.GameroundGeneratingService
 import at.birnbaua.tournament.data.service.gen.MatchGeneratingService
 import at.birnbaua.tournament.data.service.gen.TournamentGeneratingService
+import at.birnbaua.tournament.exception.ResourceNotFoundException
 import at.birnbaua.tournament.exception.TournamentException
 import at.birnbaua.tournament.pdf.PdfService
 import org.slf4j.Logger
@@ -14,6 +15,8 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Isolation
+import org.springframework.transaction.annotation.Transactional
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import reactor.util.function.Tuple3
@@ -39,12 +42,13 @@ class ControllerService {
     @Autowired private lateinit var mgs: MatchGeneratingService
     @Autowired private lateinit var pdfService: PdfService
 
-    fun generateAndSaveTournamentWithTeamsAndFields(template: String, tournamentId: String, teams: Int, fields: Int) : Mono<Tuple3<Tournament,List<Team>,List<Field>>> {
+    fun generateAndSaveTournamentWithTeamsAndFields(template: String, tournamentId: String, teams: Int?, fields: Int?) : Mono<Tuple3<Tournament,List<Team>,List<Field>>> {
         return tts.findById(template).flatMap { generateAndSaveTournamentWithTeamsAndFields(it,tournamentId,teams, fields) }
     }
 
-    fun generateAndSaveTournamentWithTeamsAndFields(template: TournamentTemplate, tournamentId: String, teams: Int, fields: Int) : Mono<Tuple3<Tournament,List<Team>,List<Field>>> {
-        val triple = tgs.generate(tournamentId,template,teams,fields)
+    fun generateAndSaveTournamentWithTeamsAndFields(template: TournamentTemplate, tournamentId: String, teams: Int?, fields: Int?) : Mono<Tuple3<Tournament,List<Team>,List<Field>>> {
+        val triple = tgs.generate(tournamentId,template, teams ?: template.properties.maxNoOfTeams,fields ?: template.properties.minNoOfFields)
+        log.info("Tournament with id: ${triple.first.id} with ${triple.second.size} teams and ${triple.third.size} fields going to be inserted")
         return Mono.zip(
                 trs.insert(triple.first),
                 ts.insert(triple.second).collectList(),
@@ -90,13 +94,12 @@ class ControllerService {
     fun generateMatchPDF(tournamentId: String, gameroundNo: Int) : Mono<ResponseEntity<ByteArray>> {
         return ms.findAllByGameround(tournamentId,gameroundNo)
             .collectList()
-            .map { pdfService.matchesToPdf(it) }
+            .map { pdfService.matchesToPdf(it, name = "Spielberichtsbogen_$gameroundNo") }
             .map { ResponseEntity.ok()
                 .header("Content-Disposition","inline; filename=spiele_$gameroundNo.pdf")
                 .body(it)
             }
     }
-
 
     fun generateAndSaveResults(tournament: String, no: Int) : Mono<Gameround> {
         return grs.findByTournamentAndNo(tournament, no)
@@ -107,4 +110,43 @@ class ControllerService {
             }
             .flatMap { grs.save(it) }
     }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    fun renameTeam(tournament: String, no: Int, name: String) : Mono<Team> {
+        return ts.findByTournamentAndNo(tournament, no)
+            .doOnError {
+                val msg = "Team of tournament: $tournament with no: $no does not exist."
+                log.error(msg)
+                throw ResourceNotFoundException(msg)
+            }
+            .flatMap {
+                it.name = name
+                Mono.zip(
+                    ts.save(it),
+                    ms.updateTeamNameByTournamentAndNo(tournament,no,name),
+                    grs.updateTeamNameByTournamentAndNo(tournament,no,name)
+                )
+            }
+            .map { it.t1 }
+    }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    fun renameField(tournament: String, no: Int, name: String) : Mono<Field> {
+        return fs.findByTournamentAndNo(tournament, no)
+            .doOnError {
+                val msg = "Field of tournament: $tournament with no: $no does not exist."
+                log.error(msg)
+                throw ResourceNotFoundException(msg)
+            }
+            .flatMap {
+                it.name = name
+                Mono.zip(
+                    fs.upsert(it),
+                    ms.updateFieldNameByTournamentAndNo(tournament, no, name)
+                )
+            }
+            .map { it.t1 }
+    }
+
+
 }

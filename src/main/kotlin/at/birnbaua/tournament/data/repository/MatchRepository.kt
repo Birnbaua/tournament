@@ -16,6 +16,7 @@ interface MatchRepository : ReactiveMongoRepository<Match,CompositeId> {
     fun findByTournamentAndNo(tournament: String, no: Int) : Mono<Match>
     fun findAllByTournament(tournament: String) : Flux<Match>
     fun findAllByTournamentAndGameround(tournament: String, gameround: Int) : Flux<Match>
+    fun findAllByTournamentAndNoGreaterThanEqual(tournament: String, no: Int) : Flux<Match>
     fun deleteByTournamentAndNo(tournament: String, no: Int) : Mono<Long>
     fun deleteAllByTournament(tournament: String) : Mono<Long>
     fun deleteAllByTournamentAndNoIn(tournament: String, no: List<Int>) : Mono<Long>

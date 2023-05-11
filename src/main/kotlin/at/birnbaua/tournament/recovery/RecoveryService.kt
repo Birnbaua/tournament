@@ -66,12 +66,11 @@ class RecoveryService {
         Mono.just(Files.readString(Path.of("$path/$tournament/tournament.json")))
             .flatMap { tournamentService.insert(mapper.readValue(it,Tournament::class.java)) }.subscribe()
 
-        /*
+
         Mono.just(Files.readString(Path.of("$path/$tournament/gamerounds.json")))
-            .flatMapMany {
-                val type = mapper.typeFactory.constructCollectionType(List::class.java,Gameround::class.java)
-                mapper.readValue(it,type)
-            }.subscribe()
+            .flatMap { gameroundService.insert(readToList<Gameround>(it)).collectList() }
+            .subscribe()
+        /*
         Mono.just(Files.readString(Path.of("$path/$tournament/fields.json")))
             .flatMapMany {
                 val type = mapper.typeFactory.constructCollectionType(List::class.java, Field::class.java)
@@ -106,5 +105,10 @@ class RecoveryService {
                     }
                 }catch(_: Exception) {}
             }
+    }
+
+    private inline fun <reified T> readToList(str: String) : List<T> {
+        val type = mapper.typeFactory.constructCollectionType(List::class.java,T::class.java)
+        return mapper.readValue(str,type)
     }
 }
