@@ -104,7 +104,7 @@ class IntermediateRound() {
 
     private fun genSmall(name: String, desc: String, no: Int) : GameroundTemplate {
         val grt = GameroundTemplate()
-        grt.groupBinding.addOrReplace(null, setOf(), (0 until no).toList())
+        grt.groupBinding.addOrReplace(null, setOf(), (0 until no).toList(),0)
         grt.matchMakingConfig[null] = genMatchMakingConfig()
         grt.groupMakingConfig[null] = genGroupMakingConfig()
         grt.defaultGroupSize = 5
@@ -119,8 +119,8 @@ class IntermediateRound() {
     private fun genMedium(name: String, desc: String, no: Int) : GameroundTemplate {
         val grt = GameroundTemplate()
         grt.groupBinding.addOrReplace(null, setOf("PROFESSIONAL","HOBBY"), listOf())
-        grt.groupBinding.addOrReplace("PROFESSIONAL", setOf(), (0 until 2).toList())
-        grt.groupBinding.addOrReplace("HOBBY", setOf(), (2 until no).toList())
+        grt.groupBinding.addOrReplace("PROFESSIONAL", setOf(), (0 until 2).toList(),0)
+        grt.groupBinding.addOrReplace("HOBBY", setOf(), (2 until no).toList(),1)
         grt.matchMakingConfig[null] = genMatchMakingConfig()
         grt.groupMakingConfig[null] = genGroupMakingConfig()
         grt.defaultGroupSize = 5
@@ -135,8 +135,8 @@ class IntermediateRound() {
     private fun genLarge(name: String, desc: String, no: Int) : GameroundTemplate {
         val grt = GameroundTemplate()
         grt.groupBinding.addOrReplace(null, setOf("PROFESSIONAL","HOBBY"), listOf())
-        grt.groupBinding.addOrReplace("PROFESSIONAL", setOf(), (0 until 4).toList())
-        grt.groupBinding.addOrReplace("HOBBY", setOf(), (4 until 8).toList())
+        grt.groupBinding.addOrReplace("PROFESSIONAL", setOf(), (0 until 4).toList(),0)
+        grt.groupBinding.addOrReplace("HOBBY", setOf(), (4 until 8).toList(),1)
         grt.matchMakingConfig[null] = genMatchMakingConfig()
         grt.groupMakingConfig[null] = genGroupMakingConfig()
         grt.defaultGroupSize = 5
@@ -151,9 +151,9 @@ class IntermediateRound() {
     private fun genXLarge(name: String, desc: String, no: Int) : GameroundTemplate {
         val grt = GameroundTemplate()
         grt.groupBinding.addOrReplace(null, setOf("PROFESSIONAL","HOBBY A","HOBBY B"), listOf())
-        grt.groupBinding.addOrReplace("PROFESSIONAL", setOf(), (0 until 4).toList())
-        grt.groupBinding.addOrReplace("HOBBY A", setOf(), (4 until 8).toList())
-        grt.groupBinding.addOrReplace("HOBBY B", setOf(), (8 until 12).toList())
+        grt.groupBinding.addOrReplace("PROFESSIONAL", setOf(), (0 until 4).toList(),0)
+        grt.groupBinding.addOrReplace("HOBBY A", setOf(), (4 until 8).toList(),1)
+        grt.groupBinding.addOrReplace("HOBBY B", setOf(), (8 until 12).toList(),2)
         grt.matchMakingConfig[null] = genMatchMakingConfig()
         grt.groupMakingConfig[null] = genGroupMakingConfig()
         grt.defaultGroupSize = 5

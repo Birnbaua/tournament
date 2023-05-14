@@ -13,7 +13,8 @@ class Tree<K,V> {
 
     data class TreeEntry<K,V> constructor(
         var children: Set<K> = mutableSetOf(),
-        var values: List<V> = mutableListOf()
+        var values: List<V> = mutableListOf(),
+        var rank: Int = 0
     )
 
     var desc: String? = null
@@ -23,7 +24,7 @@ class Tree<K,V> {
     var entries: MutableMap<K?,TreeEntry<K,V>> = mutableMapOf()
 
     @JsonIgnore
-    fun addOrReplace(key: K?, children: Set<K>, values: List<V>) {
+    fun addOrReplace(key: K?, children: Set<K>, values: List<V>, rank: Int = 0) {
         if ((key != null) && (key.toString().lowercase() == "null")) throw java.lang.IllegalArgumentException("Key must not have name \"null\"!")
         if(this.entries.isEmpty() && key != null) throw IllegalArgumentException("Tree must contain root node with key == null!")
         this.entries[key] = TreeEntry(children,values)

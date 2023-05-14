@@ -4,12 +4,14 @@ import at.birnbaua.tournament.data.document.*
 import at.birnbaua.tournament.data.document.template.TournamentTemplate
 import at.birnbaua.tournament.data.service.*
 import at.birnbaua.tournament.data.service.feizi.SimpleOrderService
+import at.birnbaua.tournament.data.service.feizi.SimpleResult
 import at.birnbaua.tournament.data.service.gen.GameroundGeneratingService
 import at.birnbaua.tournament.data.service.gen.MatchGeneratingService
 import at.birnbaua.tournament.data.service.gen.TournamentGeneratingService
 import at.birnbaua.tournament.exception.ResourceNotFoundException
 import at.birnbaua.tournament.exception.TournamentException
 import at.birnbaua.tournament.pdf.PdfService
+import javassist.Loader.Simple
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -107,6 +109,7 @@ class ControllerService {
         return grs.findByTournamentAndNo(tournament, no)
             .zipWhen { ms.findAllByGameround(tournament, no).collectList() }
             .map {
+               
                 it.t1.results = sos.genResults(it.t2,it.t1.results.associateBy { it.team },it.t1.groups, it.t1.orderConfig, 0)
                 it.t1
             }
