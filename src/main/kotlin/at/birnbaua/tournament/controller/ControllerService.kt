@@ -108,10 +108,18 @@ class ControllerService {
         //TODO("MAKE ORDERING FOR EACH LEAF OF GROUPS AND NOT ALL TOGETHER --> IS MIXING UP EXTERNAL RANKING")
         return grs.findByTournamentAndNo(tournament, no)
             .zipWhen { ms.findAllByGameround(tournament, no).collectList() }
-            .map {
-               
-                it.t1.results = sos.genResults(it.t2,it.t1.results.associateBy { it.team },it.t1.groups, it.t1.orderConfig, 0)
-                it.t1
+            .map { tuple ->
+                tuple.t1.results = tuple.t1.genGroupOrder()
+                    .sortedBy { it.first }
+                    .onEach { triple -> log.debug("Rank: ${triple.first}, groups: ${triple.second.map { it.no }}, offset: ${triple.third}") }
+                    .map { triple ->
+                        sos.genResults(
+                            tuple.t2,
+                            tuple.t1.results.filter { triple.second.flatMap { g -> g.teams }.contains(it.team) }.associateBy { it.team },
+                            triple.second,
+                            tuple.t1.orderConfig, triple.third)
+                    }.flatten().toMutableList()
+                tuple.t1
             }
             .flatMap { grs.save(it) }
     }

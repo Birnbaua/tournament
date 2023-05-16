@@ -1,6 +1,8 @@
 package at.birnbaua.tournament.data.lifecycle
 
 import at.birnbaua.tournament.data.document.Gameround
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventListener
 import org.springframework.data.mongodb.core.mapping.event.AfterConvertEvent
 import org.springframework.data.mongodb.core.mapping.event.BeforeConvertEvent
@@ -8,6 +10,8 @@ import org.springframework.stereotype.Component
 
 @Component
 class GameroundLifecycle : AbstractMongoEventListener<Gameround>() {
+
+    private val log: Logger = LoggerFactory.getLogger(GameroundLifecycle::class.java)
 
     override fun onBeforeConvert(event: BeforeConvertEvent<Gameround>) {
         onBeforeConvert(event.source)

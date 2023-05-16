@@ -59,6 +59,9 @@ class Gameround() {
     @Field(name = "audit")
     var audit: AuditEntry = AuditEntry()
 
+    /**
+     * @return triple with first=rank, second=groups, third=offset
+     */
     fun genGroupOrder() : List<Triple<Int,List<EmbeddedGroup>,Int>> {
         val pairs =  groupBinding.getAllLeafNodes(null)
             .map { node ->
@@ -70,7 +73,7 @@ class Gameround() {
         val triples = mutableListOf<Triple<Int,List<EmbeddedGroup>,Int>>()
         for (i in (pairs.indices)) {
             if(i == 0) triples.add(i,Triple(pairs[i].first,pairs[i].second,0))
-            else triples.add(i,Triple(pairs[i].first,pairs[i].second,pairs[i].second.size+triples[i-1].third))
+            else triples.add(i,Triple(pairs[i].first,pairs[i].second,pairs[i].second.flatMap { it.teams }.size+triples[i-1].third))
         }
         return triples
     }

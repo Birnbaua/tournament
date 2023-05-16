@@ -78,7 +78,7 @@ class PreliminaryRound() {
     }
 
     fun genGameroundTemplate(name: String, desc: String, numberOfGroups: Int = 1) : GameroundTemplate {
-        if(numberOfGroups <=0 ||numberOfGroups >= 12) throw IllegalArgumentException("The number of group needs to be between 1 and 12!")
+        if(numberOfGroups <=0 || numberOfGroups > 12) throw IllegalArgumentException("The number of group needs to be between 1 and 12!")
         val template =  gen(name,desc,numberOfGroups)
         template.id = this.id
         template.groups = numberOfGroups

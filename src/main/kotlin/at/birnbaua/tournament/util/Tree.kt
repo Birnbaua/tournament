@@ -27,7 +27,7 @@ class Tree<K,V> {
     fun addOrReplace(key: K?, children: Set<K>, values: List<V>, rank: Int = 0) {
         if ((key != null) && (key.toString().lowercase() == "null")) throw java.lang.IllegalArgumentException("Key must not have name \"null\"!")
         if(this.entries.isEmpty() && key != null) throw IllegalArgumentException("Tree must contain root node with key == null!")
-        this.entries[key] = TreeEntry(children,values)
+        this.entries[key] = TreeEntry(children,values,rank)
     }
     @JsonIgnore
     fun remove(key: K?) : Boolean {

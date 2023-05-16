@@ -3,4 +3,5 @@
     <include resource="org/springframework/boot/logging/logback/base.xml" />
     <logger name="at.birnbaua.tournament.data.service.feizi.SimpleOrderService" level="DEBUG"/>
     <logger name="at.birnbaua.tournament.data" level="DEBUG"/>
+    <logger name="at.birnbaua.tournament.controller.ControllerService" level="DEBUG"/>
 </configuration>
