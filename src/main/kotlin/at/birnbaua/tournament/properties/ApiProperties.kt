@@ -14,5 +14,5 @@ class ApiProperties {
     var gameround: String = "gamerounds"
     var field: String = "fields"
     var team: String = "teams"
-    var match: String = "matchs"
+    var match: String = "matches"
 }
